@@ -7,10 +7,13 @@ echo "🚀 Iniciando HairCloud..."
 php artisan route:cache
 php artisan view:cache
 
-# 2. Ejecutar migraciones
+# 2. Ejecutar migraciones y seeds
 # Esto ahora funcionará porque ya pusiste DB_HOST en Render
 echo "📦 Ejecutando migraciones..."
 php artisan migrate --force
+
+# Solo sembrar si la tabla está vacía (evitar duplicados)
+php artisan db:seed --force || echo "⚠️ Seeds ya existían o fallaron"
 
 echo "✅ Todo listo. Arrancando Apache..."
 
