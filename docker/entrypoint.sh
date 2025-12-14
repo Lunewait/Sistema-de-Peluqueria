@@ -1,20 +1,19 @@
 #!/bin/bash
-
-# Exit on fail
 set -e
 
-echo "🚀 Iniciando HairCloud..."
+echo "🚀 Iniciando Apache..."
 
-# NO cachear config - Laravel leerá las variables de entorno directamente
-# Solo cachear rutas y vistas que no dependen de .env
-php artisan route:cache
-php artisan view:cache
+# Iniciar Apache en segundo plano
+apache2-ctl start
 
-# Ejecutar migraciones
+# Esperar a que Apache esté listo
+sleep 2
+
+# AHORA sí ejecutar migraciones (cuando todas las variables ya están cargadas)
 echo "📦 Ejecutando migraciones..."
-php artisan migrate --force
+php artisan migrate --force || echo "⚠️  Migraciones fallaron, pero continuando..."
 
-echo "✅ Listo. Iniciando servidor..."
+echo "✅ Sistema listo"
 
-# Iniciar Apache
-exec apache2-foreground
+# Mantener Apache corriendo en primer plano
+tail -f /var/log/apache2/error.log
