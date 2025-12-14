@@ -20,6 +20,15 @@ class DatabaseSeeder extends Seeder
         $roleEmployee = Role::create(['name' => 'employee', 'description' => 'Stylist/Staff']);
         $roleClient = Role::create(['name' => 'client', 'description' => 'Customer']);
 
+        // ADMIN USER - Credenciales: admin@lumina.com / admin123
+        User::create([
+            'role_id' => $roleAdmin->id,
+            'name' => 'Administrador',
+            'email' => 'admin@lumina.com',
+            'password' => Hash::make('admin123'),
+            'active' => true,
+        ]);
+
         // 2. Users (Stylists)
         $ana = User::create([
             'role_id' => $roleEmployee->id,
