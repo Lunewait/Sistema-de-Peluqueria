@@ -3,23 +3,18 @@
 # Exit on fail
 set -e
 
-# Role: App Setup Automation
+echo "🚀 Iniciando HairCloud..."
 
-echo "🚀 Iniciando configuración de HairCloud (Modo Estricto)..."
-
-# NOTA: Ya no creamos .env aquí. Confiaremos 100% en las variables de Render.
-
-# 3. Optimizar Laravel para producción
-echo "⚡ Optimizando caché..."
-php artisan config:cache
+# NO cachear config - Laravel leerá las variables de entorno directamente
+# Solo cachear rutas y vistas que no dependen de .env
 php artisan route:cache
 php artisan view:cache
 
-# 4. Base de Datos (Esperar a que esté lista y migrar)
-echo "📦 Ejecutando migraciones y seeds..."
+# Ejecutar migraciones
+echo "📦 Ejecutando migraciones..."
 php artisan migrate --force
 
-echo "✅ Todo listo. Iniciando Apache..."
+echo "✅ Listo. Iniciando servidor..."
 
-# 5. Iniciar Apache en primer plano
+# Iniciar Apache
 exec apache2-foreground
