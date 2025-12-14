@@ -36,10 +36,40 @@
                 <a href="#tienda" class="text-gray-600 hover:text-teal-600 transition">Tienda</a>
                 <a href="#testimonios" class="text-gray-600 hover:text-teal-600 transition">Historias</a>
             </div>
-            <a href="{{ route('booking.step1') }}"
-                class="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-full font-medium transition-all shadow-lg shadow-teal-600/20">
-                Reservar Ahora
-            </a>
+            <div class="flex items-center gap-4">
+                @auth
+                    {{-- Si está logueado, mostrar link a su panel --}}
+                    @if(auth()->user()->role_id == 1)
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="text-gray-600 hover:text-teal-600 font-medium text-sm flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"></path>
+                            </svg>
+                            Panel Admin
+                        </a>
+                    @elseif(auth()->user()->role_id == 2)
+                        <a href="{{ route('stylist.dashboard') }}"
+                            class="text-gray-600 hover:text-teal-600 font-medium text-sm flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                </path>
+                            </svg>
+                            Mi Agenda
+                        </a>
+                    @endif
+                @else
+                    {{-- Si no está logueado, mostrar link discreto de Staff --}}
+                    <a href="{{ route('login') }}" class="text-gray-500 hover:text-teal-600 text-sm font-medium">
+                        Staff
+                    </a>
+                @endauth
+                <a href="{{ route('booking.step1') }}"
+                    class="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-full font-medium transition-all shadow-lg shadow-teal-600/20">
+                    Reservar Ahora
+                </a>
+            </div>
         </div>
     </nav>
 
@@ -251,10 +281,7 @@
         </div>
     </footer>
 
-    <!-- Admin Login Link (Discreto) -->
-    <div class="fixed bottom-4 right-4">
-        <a href="{{ route('login') }}" class="text-xs text-gray-400 hover:text-teal-600 transition">Admin</a>
-    </div>
+
 
 </body>
 
