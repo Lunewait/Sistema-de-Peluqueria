@@ -1,19 +1,18 @@
 #!/bin/bash
 set -e
 
-echo "🚀 Iniciando Apache..."
+echo "🚀 Iniciando HairCloud..."
 
-# Iniciar Apache en segundo plano
-apache2-ctl start
+# 1. Caché de rutas y vistas (Mejora velocidad)
+php artisan route:cache
+php artisan view:cache
 
-# Esperar a que Apache esté listo
-sleep 2
-
-# AHORA sí ejecutar migraciones (cuando todas las variables ya están cargadas)
+# 2. Ejecutar migraciones
+# Esto ahora funcionará porque ya pusiste DB_HOST en Render
 echo "📦 Ejecutando migraciones..."
-php artisan migrate --force || echo "⚠️  Migraciones fallaron, pero continuando..."
+php artisan migrate --force
 
-echo "✅ Sistema listo"
+echo "✅ Todo listo. Arrancando Apache..."
 
-# Mantener Apache corriendo en primer plano
-tail -f /var/log/apache2/error.log
+# 3. Iniciar Apache (Comando oficial de la imagen Docker)
+exec apache2-foreground
