@@ -20,7 +20,7 @@ class BookingController extends Controller
         // Fetch stylists (role = 'employee')
         $stylists = User::whereHas('role', function ($q) {
             $q->where('name', 'employee');
-        })->where('active', true)->get();
+        })->where('is_active', true)->get();
 
         return view('booking.step1-service', compact('services', 'stylists'));
     }

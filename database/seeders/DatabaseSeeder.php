@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
                 'role_id' => $roleAdmin->id,
                 'name' => 'Administrador',
                 'password' => Hash::make('admin123'),
-                'active' => true,
+                'is_active' => true,
             ]
         );
 
@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
                 'specialty' => 'Coloración y Mechas',
                 'phone' => '987654321',
                 'profile_image' => 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150',
-                'active' => true,
+                'is_active' => true,
             ]
         );
 
@@ -54,7 +54,7 @@ class DatabaseSeeder extends Seeder
                 'specialty' => 'Cortes Modernos',
                 'phone' => '987654322',
                 'profile_image' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
-                'active' => true,
+                'is_active' => true,
             ]
         );
 
@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
                 'specialty' => 'Tratamientos Capilares',
                 'phone' => '987654323',
                 'profile_image' => 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150',
-                'active' => true,
+                'is_active' => true,
             ]
         );
 
@@ -79,7 +79,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'María García',
                 'password' => Hash::make('password'),
                 'phone' => '912345678',
-                'active' => true,
+                'is_active' => true,
             ]
         );
 
@@ -90,7 +90,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Sofía Mendez',
                 'password' => Hash::make('password'),
                 'phone' => '912345679',
-                'active' => true,
+                'is_active' => true,
             ]
         );
 
