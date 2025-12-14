@@ -17,10 +17,10 @@ class BookingController extends Controller
     {
         // Fetch real services from DB
         $services = Service::where('is_active', true)->orderBy('sort_order')->get();
-        // Fetch stylists using the 'stylist' scope or role check
+        // Fetch stylists (role = 'employee')
         $stylists = User::whereHas('role', function ($q) {
-            $q->where('name', 'stylist');
-        })->get();
+            $q->where('name', 'employee');
+        })->where('active', true)->get();
 
         return view('booking.step1-service', compact('services', 'stylists'));
     }
@@ -57,17 +57,17 @@ class BookingController extends Controller
             'service_id' => 'required|exists:services,id',
             'date' => 'required|date',
             'time' => 'required',
-            'customer_email' => 'required|email' // Important
+            'client_email' => 'required|email'
         ]);
 
         $service = Service::find($request->service_id);
 
         // 1. Find or Create User
         $user = User::firstOrCreate(
-            ['email' => $request->customer_email],
+            ['email' => $request->client_email],
             [
-                'name' => $request->input('customer_name', 'Guest'),
-                'phone' => $request->input('customer_phone'),
+                'name' => $request->input('client_name', 'Cliente'),
+                'phone' => $request->input('client_phone'),
                 'role_id' => 3, // Client Role
                 'password' => Hash::make(Str::random(10)), // Random password
             ]

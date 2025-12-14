@@ -126,7 +126,7 @@
                         <h3 class="text-xl font-bold text-gray-900 mb-3">{{ $servicio['name'] }}</h3>
                         <p class="text-gray-500 mb-6">{{ $servicio['desc'] }}</p>
                         <div class="flex justify-between items-center">
-                            <span class="text-2xl font-bold text-gray-900">${{ $servicio['price'] }}</span>
+                            <span class="text-2xl font-bold text-gray-900">S/{{ $servicio['price'] }}</span>
                             <a href="{{ route('booking.step1') }}"
                                 class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center group-hover:bg-teal-600 group-hover:border-teal-600 group-hover:text-white transition-all">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -159,9 +159,9 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                 @php
                     $productos = [
-                        ['name' => 'Sérum Reparador Nocturno', 'price' => 34.50, 'best' => true, 'img' => 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=400'],
-                        ['name' => 'Mascarilla Hidratación Profunda', 'price' => 28.00, 'best' => true, 'img' => 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400'],
-                        ['name' => 'Aceite de Argán Puro', 'price' => 22.00, 'best' => true, 'img' => 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400'],
+                        ['name' => 'Sérum Reparador Nocturno', 'price' => 34.50, 'best' => true, 'img' => '/images/serum.png'],
+                        ['name' => 'Mascarilla Hidratación Profunda', 'price' => 28.00, 'best' => true, 'img' => '/images/mascarilla.png'],
+                        ['name' => 'Aceite de Argán Puro', 'price' => 22.00, 'best' => true, 'img' => '/images/aceite.png'],
                         ['name' => 'Shampoo Voluminizador', 'price' => 18.00, 'best' => false, 'img' => 'https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=400'],
                     ];
                 @endphp
@@ -178,7 +178,7 @@
                         </div>
                         <h4 class="font-semibold text-gray-900">{{ $producto['name'] }}</h4>
                         <div class="flex justify-between items-center mt-2">
-                            <span class="text-teal-600 font-bold">${{ number_format($producto['price'], 2) }}</span>
+                            <span class="text-teal-600 font-bold">S/{{ number_format($producto['price'], 2) }}</span>
                             <a href="#" class="text-gray-500 hover:text-teal-600 text-sm font-medium">Ver Producto</a>
                         </div>
                     </div>
