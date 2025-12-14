@@ -12,7 +12,7 @@ class Product extends Model
         'description',
         'price',
         'sale_price',
-        'stock',
+        'stock_quantity',
         'sku',
         'category',
         'brand',
