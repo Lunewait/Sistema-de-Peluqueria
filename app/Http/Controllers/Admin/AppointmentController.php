@@ -22,7 +22,7 @@ class AppointmentController extends Controller
     public function create()
     {
         $services = Service::where('is_active', true)->get();
-        $stylists = User::where('role_id', 2)->where('active', true)->get();
+        $stylists = User::where('role_id', 2)->where('is_active', true)->get();
         $clients = User::where('role_id', 3)->get();
         return view('admin.appointments.create', compact('services', 'stylists', 'clients'));
     }
@@ -60,7 +60,7 @@ class AppointmentController extends Controller
     public function edit(Appointment $appointment)
     {
         $services = Service::where('is_active', true)->get();
-        $stylists = User::where('role_id', 2)->where('active', true)->get();
+        $stylists = User::where('role_id', 2)->where('is_active', true)->get();
         $clients = User::where('role_id', 3)->get();
         return view('admin.appointments.edit', compact('appointment', 'services', 'stylists', 'clients'));
     }
