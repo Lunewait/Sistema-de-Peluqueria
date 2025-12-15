@@ -28,7 +28,13 @@ class ServiceController extends Controller
             'duration_minutes' => 'required|integer|min:15',
             'category' => 'nullable|string|max:100',
             'is_active' => 'boolean',
+            'image' => 'nullable|image|max:2048', // 2MB Max
         ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('services', 'public');
+            $validated['image_url'] = '/storage/' . $path;
+        }
 
         $validated['is_active'] = $request->has('is_active');
         $validated['sort_order'] = Service::max('sort_order') + 1;
@@ -53,7 +59,13 @@ class ServiceController extends Controller
             'duration_minutes' => 'required|integer|min:15',
             'category' => 'nullable|string|max:100',
             'is_active' => 'boolean',
+            'image' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('services', 'public');
+            $validated['image_url'] = '/storage/' . $path;
+        }
 
         $validated['is_active'] = $request->has('is_active');
         $service->update($validated);

@@ -26,12 +26,18 @@ class ProductController extends Controller
             'slug' => 'required|string|max:255|unique:products',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
+            'stock_quantity' => 'required|integer|min:0',
             'category' => 'nullable|string|max:100',
             'brand' => 'nullable|string|max:100',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
+            'image' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $validated['image_url'] = '/storage/' . $path;
+        }
 
         $validated['is_active'] = $request->has('is_active');
         $validated['is_featured'] = $request->has('is_featured');
@@ -54,12 +60,18 @@ class ProductController extends Controller
             'slug' => 'required|string|max:255|unique:products,slug,' . $product->id,
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
+            'stock_quantity' => 'required|integer|min:0',
             'category' => 'nullable|string|max:100',
             'brand' => 'nullable|string|max:100',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
+            'image' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $validated['image_url'] = '/storage/' . $path;
+        }
 
         $validated['is_active'] = $request->has('is_active');
         $validated['is_featured'] = $request->has('is_featured');
