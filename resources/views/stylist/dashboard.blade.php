@@ -146,7 +146,8 @@
                     <div class="min-h-[150px] p-2 {{ $currentDay->isToday() ? 'bg-teal-50/20' : '' }}">
                         <p
                             class="text-center text-sm mb-2 {{ $currentDay->isToday() ? 'font-bold text-teal-600' : 'text-gray-400' }}">
-                            {{ $currentDay->format('d') }}</p>
+                            {{ $currentDay->format('d') }}
+                        </p>
                         @foreach($appointments as $wApt)
                             @if($wApt->start_time->isSameDay($currentDay))
                                 <div
@@ -163,19 +164,26 @@
     </main>
 
     <!-- Modal Finalizar Cita -->
-    <div x-show="openModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+    <div x-show="openModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;"
+        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+
         <!-- Backdrop -->
-        <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" @click="openModal = false"></div>
+        <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" @click="openModal = false"></div>
 
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="relative bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl transform transition-all">
+            <div class="relative bg-white rounded-2xl max-w-2xl w-full p-0 shadow-2xl transform transition-all overflow-hidden"
+                @click.stop>
 
-                <div class="flex justify-between items-center mb-6">
+                <!-- Modal Header -->
+                <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                     <div>
                         <h2 class="text-xl font-bold text-gray-900">Finalizar Cita</h2>
-                        <p class="text-sm text-gray-500">¿Productos vendidos en salón?</p>
+                        <p class="text-sm text-gray-500">Selecciona los productos vendidos</p>
                     </div>
-                    <button @click="openModal = false" class="text-gray-400 hover:text-gray-600">
+                    <button @click="openModal = false"
+                        class="text-gray-400 hover:text-gray-600 transition p-2 hover:bg-gray-100 rounded-full">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M6 18L18 6M6 6l12 12"></path>
@@ -183,67 +191,119 @@
                     </button>
                 </div>
 
-                <form x-bind:action="'/stylist/appointments/' + selectedAppointment + '/complete'" method="POST">
+                <form x-bind:action="'/stylist/appointments/' + selectedAppointment + '/complete'" method="POST"
+                    class="p-6">
                     @csrf
 
-                    <p class="text-sm text-gray-600 mb-4">Agrega los productos que el cliente se lleva para ajustar el
-                        stock automáticamente.</p>
-
-                    <!-- Search Product (Fake implementation for UI) -->
+                    <!-- Search Product -->
                     <div class="relative mb-6">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                         </div>
                         <input type="text"
-                            class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl text-sm focus:ring-teal-500 focus:border-teal-500"
-                            placeholder="Buscar producto...">
+                            class="block w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition shadow-sm placeholder-gray-400"
+                            placeholder="Buscar producto por nombre..." x-model="searchQuery">
                     </div>
 
                     <!-- Product Grid -->
-                    <div
-                        class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-60 overflow-y-auto mb-8 pr-2 custom-scrollbar">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar"
+                        x-data="{ searchQuery: '' }">
                         @foreach($products as $product)
-                            <div class="flex items-center p-3 border border-gray-200 rounded-xl hover:border-teal-400 transition cursor-pointer"
-                                x-data="{ count: 0 }">
-                                <img src="{{ $product->image_url ?? '/images/products/default.jpg' }}"
-                                    class="w-12 h-12 rounded-lg object-cover bg-gray-100">
-                                <div class="ml-3 flex-1">
-                                    <h4 class="text-sm font-semibold text-gray-900 truncate">{{ $product->name }}</h4>
-                                    <p class="text-xs text-gray-500">Stock: {{ $product->stock_quantity }}</p>
+                            <div class="flex items-center p-3 border border-gray-200 rounded-xl hover:border-teal-500 hover:shadow-md transition group bg-white"
+                                x-data="{ count: 0 }"
+                                x-show="searchQuery === '' || '{{ strtolower($product->name) }}'.includes(searchQuery.toLowerCase())">
+
+                                <!-- Image with Fallback -->
+                                <div
+                                    class="w-16 h-16 rounded-lg bg-gray-100 flex-shrink-0 overflow-hidden border border-gray-100 relative">
+                                    @if($product->image_url)
+                                        <img src="{{ $product->image_url }}" class="w-full h-full object-cover">
+                                    @else
+                                        <div class="w-full h-full flex items-center justify-center text-gray-300">
+                                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                                </path>
+                                            </svg>
+                                        </div>
+                                    @endif
                                 </div>
+
+                                <div class="ml-4 flex-1 min-w-0">
+                                    <h4 class="text-sm font-bold text-gray-900 truncate pr-2">{{ $product->name }}</h4>
+                                    <div class="flex justify-between items-center mt-1">
+                                        <p class="text-xs text-gray-500 font-medium">Stock: {{ $product->stock_quantity }}
+                                        </p>
+                                        <p class="text-xs font-bold text-teal-600">S/{{ number_format($product->price, 2) }}
+                                        </p>
+                                    </div>
+                                </div>
+
                                 <!-- Counter -->
-                                <div class="flex items-center gap-2">
+                                <div
+                                    class="flex flex-col items-center gap-1 ml-2 bg-gray-50 p-1 rounded-lg border border-gray-100">
+                                    <button type="button" @click="if(count < {{ $product->stock_quantity }}) count++"
+                                        class="w-6 h-6 rounded bg-white hover:bg-teal-50 border border-gray-200 flex items-center justify-center text-teal-600 font-bold shadow-sm transition disabled:opacity-50"
+                                        :disabled="count >= {{ $product->stock_quantity }}">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 15l7-7 7 7"></path>
+                                        </svg>
+                                    </button>
+                                    <span class="text-sm font-bold w-5 text-center text-gray-900" x-text="count">0</span>
                                     <button type="button" @click="if(count>0) count--"
-                                        class="w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 text-xs font-bold">-</button>
-                                    <span class="text-sm font-medium w-4 text-center" x-text="count">0</span>
-                                    <button type="button" @click="count++"
-                                        class="w-6 h-6 rounded-full bg-teal-50 hover:bg-teal-100 flex items-center justify-center text-teal-600 text-xs font-bold">+</button>
+                                        class="w-6 h-6 rounded bg-white hover:bg-red-50 border border-gray-200 flex items-center justify-center text-gray-500 font-bold shadow-sm transition">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </button>
                                     <input type="hidden" :name="'products[{{ $product->id }}]'" :value="count">
                                 </div>
+
                             </div>
                         @endforeach
                     </div>
 
-                    <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
+                    <div class="flex justify-end gap-3 pt-6 mt-2 border-t border-gray-100">
                         <button type="button" @click="openModal = false"
-                            class="px-5 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-lg transition">Cancelar</button>
+                            class="px-5 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-xl transition">Cancelar</button>
                         <button type="submit"
-                            class="px-5 py-2.5 text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-lg flex items-center gap-2 shadow-lg shadow-slate-900/20 transform transition active:scale-95">
+                            class="px-6 py-2.5 text-sm font-bold text-white bg-gray-900 hover:bg-gray-800 rounded-xl flex items-center gap-2 shadow-lg shadow-gray-900/20 transform transition active:scale-95">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2">
-                                </path>
+                                    d="M5 13l4 4L19 7"></path>
                             </svg>
-                            Finalizar y Ajustar Stock
+                            Confirmar y Finalizar
                         </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+    </style>
 
 </body>
 
