@@ -16,8 +16,8 @@
     <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div class="max-w-full mx-auto px-6 py-3 flex justify-between items-center">
             <div class="flex items-center gap-8">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">L</div>
+                <div class="flex items-center gap-3">
+                    <img src="/images/logo.png" alt="Lumina Logo" class="w-10 h-10 object-contain">
                     <span class="text-lg font-bold text-gray-900">Lumina<span class="text-gray-400 font-normal">Manager</span></span>
                 </div>
                 <nav class="hidden md:flex items-center gap-6">

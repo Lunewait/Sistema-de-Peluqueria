@@ -53,7 +53,7 @@
     <header class="bg-white border-b border-gray-100 sticky top-0 z-50">
         <div class="max-w-5xl mx-auto px-4 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <img src="/images/logo.png" alt="HairCloud" class="h-16 w-auto object-contain">
+                <img src="/images/logo.png" alt="Lumina Logo" class="h-16 w-auto object-contain">
             </div>
             <div class="text-xs text-gray-400 font-medium tracking-wide uppercase">
                 Reserva Online

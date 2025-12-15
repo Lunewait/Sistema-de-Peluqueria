@@ -27,9 +27,8 @@
     <nav class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center text-white font-bold">L
-                </div>
-                <span class="text-xl font-bold text-gray-900">Lumina.</span>
+                <img src="/images/logo.png" alt="Lumina Logo" class="h-10 w-auto">
+                <span class="text-xl font-bold text-gray-900">Lumina</span>
             </div>
             <div class="hidden md:flex items-center gap-8">
                 <a href="#servicios" class="text-gray-600 hover:text-teal-600 transition">Servicios</a>
@@ -256,10 +255,9 @@
     <!-- Footer -->
     <footer class="py-10 px-6 border-t border-gray-100">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center text-white font-bold">L
-                </div>
-                <span class="text-xl font-bold text-gray-900">Lumina.</span>
+            <div class="flex flex-col items-center gap-4 mb-8">
+                <img src="/images/logo.png" alt="Lumina Logo" class="h-12 w-auto">
+                {{-- <span class="text-xl font-bold text-gray-900">Lumina.</span> --}}
             </div>
             <p class="text-gray-500 text-sm">© 2024 Lumina Salon System. All rights reserved.</p>
             <div class="flex gap-4">
