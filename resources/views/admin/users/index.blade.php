@@ -37,7 +37,10 @@
                                         <div
                                             class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold overflow-hidden">
                                             @if($user->profile_photo_url)
-                                                <img src="{{ $user->profile_photo_url }}" class="w-full h-full object-cover">
+                                                <img src="{{ $user->profile_photo_url }}" class="w-full h-full object-cover"
+                                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                                <span
+                                                    class="hidden w-full h-full flex items-center justify-center">{{ substr($user->name, 0, 1) }}</span>
                                             @else
                                                 {{ substr($user->name, 0, 1) }}
                                             @endif
@@ -59,7 +62,7 @@
                                 <td class="px-6 py-4">
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                            {{ $user->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                                    {{ $user->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                         {{ $user->is_active ? 'Activo' : 'Inactivo' }}
                                     </span>
                                 </td>
