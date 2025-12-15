@@ -48,9 +48,9 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('appointments.index') }}"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('appointments.*') ? 'bg-teal-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition-all group">
-                        <svg class="w-5 h-5 {{ request()->routeIs('appointments.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"
+                    <a href="{{ route('admin.appointments.index') }}"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.appointments.*') ? 'bg-teal-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition-all group">
+                        <svg class="w-5 h-5 {{ request()->routeIs('admin.appointments.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"
                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
@@ -60,9 +60,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('users.index') }}"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('users.*') ? 'bg-teal-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition-all group">
-                        <svg class="w-5 h-5 {{ request()->routeIs('users.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"
+                    <a href="{{ route('admin.users.index') }}"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.users.*') ? 'bg-teal-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition-all group">
+                        <svg class="w-5 h-5 {{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"
                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
@@ -72,9 +72,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('services.index') }}"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('services.*') ? 'bg-teal-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition-all group">
-                        <svg class="w-5 h-5 {{ request()->routeIs('services.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"
+                    <a href="{{ route('admin.services.index') }}"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.services.*') ? 'bg-teal-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition-all group">
+                        <svg class="w-5 h-5 {{ request()->routeIs('admin.services.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"
                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z">
@@ -84,9 +84,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('products.index') }}"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('products.*') ? 'bg-teal-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition-all group">
-                        <svg class="w-5 h-5 {{ request()->routeIs('products.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"
+                    <a href="{{ route('admin.products.index') }}"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.products.*') ? 'bg-teal-600 text-white' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }} transition-all group">
+                        <svg class="w-5 h-5 {{ request()->routeIs('admin.products.*') ? 'text-white' : 'text-slate-500 group-hover:text-white' }}"
                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>

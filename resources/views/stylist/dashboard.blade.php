@@ -1,216 +1,250 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Agenda - Lumina</title>
+    <title>Panel de Estilista - Lumina</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .appointment-block { min-height: 60px; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
 </head>
-<body class="bg-gray-50">
+
+<body class="bg-gray-50 text-gray-800" x-data="{ openModal: false, selectedAppointment: null }">
+
     <!-- Header -->
     <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div class="max-w-full mx-auto px-6 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-8">
-                <div class="flex items-center gap-3">
-                    <img src="/images/logo.png" alt="Lumina Logo" class="w-10 h-10 object-contain">
-                    <span class="text-lg font-bold text-gray-900">Lumina<span class="text-gray-400 font-normal">Manager</span></span>
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="/images/logo.png" alt="Lumina Logo" class="w-10 h-10 object-contain">
+                <div>
+                    <h1 class="text-xl font-bold text-gray-900 leading-tight">Panel de Estilista</h1>
+                    <p class="text-xs text-gray-500">Gestión operativa y cierre de ventas</p>
                 </div>
-                <nav class="hidden md:flex items-center gap-6">
-                    <a href="#" class="text-teal-600 font-medium border-b-2 border-teal-600 pb-1">Calendario</a>
-                    <a href="#" class="text-gray-500 hover:text-teal-600 transition">Clientes</a>
-                    <a href="#" class="text-gray-500 hover:text-teal-600 transition">Servicios</a>
-                </nav>
             </div>
+
             <div class="flex items-center gap-4">
-                <a href="{{ route('home') }}" class="text-gray-400 hover:text-teal-600 transition" title="Ir a la web">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                </a>
-                <!-- User Dropdown -->
+                <div class="bg-white border border-gray-200 rounded-lg px-4 py-2 flex items-center gap-2 shadow-sm">
+                    <span class="text-sm text-gray-500">Hoy:</span>
+                    <span class="font-bold text-gray-900">{{ now()->translatedFormat('d M, Y') }}</span>
+                </div>
+
+                <!-- User Profile -->
                 <div class="relative" x-data="{ open: false }">
-                    <button onclick="toggleDropdown()" class="flex items-center gap-3 hover:bg-gray-50 rounded-xl px-3 py-2 transition">
-                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white font-semibold text-sm">
-                            {{ substr(auth()->user()->name ?? 'U', 0, 2) }}
+                    <button @click="open = !open"
+                        class="flex items-center gap-3 hover:bg-gray-50 rounded-xl px-2 py-1 transition">
+                        <div
+                            class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold border-2 border-white shadow-sm">
+                            {{ substr(auth()->user()->name ?? 'Estilista', 0, 1) }}
                         </div>
-                        <span class="text-gray-700 font-medium hidden sm:block">{{ auth()->user()->name ?? 'Usuario' }}</span>
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
-                    <div id="userDropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
-                        <div class="px-4 py-3 border-b border-gray-100">
-                            <p class="text-sm font-medium text-gray-900">{{ auth()->user()->name ?? 'Usuario' }}</p>
-                            <p class="text-xs text-gray-500">{{ auth()->user()->email ?? '' }}</p>
-                        </div>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Mi Perfil</a>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Configuración</a>
-                        <div class="border-t border-gray-100 mt-2 pt-2">
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
-                                    Cerrar Sesión
-                                </button>
-                            </form>
-                        </div>
+                    <div x-show="open" @click.away="open = false"
+                        class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Cerrar
+                                Sesión</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <div class="flex">
-        <!-- Main Calendar Area -->
-        <main class="flex-1 p-6">
-            <!-- Calendar Header -->
-            <div class="flex justify-between items-center mb-6">
-                <div class="flex items-center gap-4">
-                    <h1 class="text-2xl font-bold text-gray-900">
-                        {{ \Carbon\Carbon::now()->translatedFormat('F Y') }}
-                    </h1>
-                    <div class="flex items-center gap-1">
-                        <button class="p-2 hover:bg-gray-100 rounded-lg transition">
-                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                        </button>
-                        <button class="px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition">Hoy</button>
-                        <button class="p-2 hover:bg-gray-100 rounded-lg transition">
-                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <select class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 bg-white focus:border-teal-500 focus:ring-1 focus:ring-teal-500 outline-none">
-                        <option>Vista Diaria</option>
-                        <option selected>Vista Semanal</option>
-                        <option>Vista Mensual</option>
-                    </select>
-                    <button class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition shadow-sm">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                        Nueva Cita
-                    </button>
-                </div>
-            </div>
+    <main class="max-w-7xl mx-auto p-6">
 
-            <!-- Calendar Grid -->
-            <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-                <!-- Days Header -->
-                <div class="grid grid-cols-8 border-b border-gray-200">
-                    <div class="p-4 text-xs font-medium text-gray-400 uppercase">GMT-5</div>
-                    @php
-                        $today = \Carbon\Carbon::now();
-                        $startOfWeek = $today->copy()->startOfWeek();
-                        $days = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
-                    @endphp
-                    @for($i = 0; $i < 7; $i++)
-                        @php $day = $startOfWeek->copy()->addDays($i); @endphp
-                        <div class="p-4 text-center {{ $day->isToday() ? 'bg-teal-50' : '' }}">
-                            <p class="text-xs font-medium {{ $day->isToday() ? 'text-teal-600' : 'text-gray-400' }} uppercase">{{ $days[$i] }}</p>
-                            <p class="text-2xl font-bold {{ $day->isToday() ? 'text-teal-600' : 'text-gray-900' }}">{{ $day->format('d') }}</p>
-                        </div>
-                    @endfor
-                </div>
+        <!-- Cards Grid (Today's Focus) -->
+        <h2 class="text-lg font-semibold text-gray-900 mb-6">Citas de Hoy</h2>
 
-                <!-- Time Slots -->
-                <div class="overflow-y-auto" style="max-height: 500px;">
-                    @for($hour = 9; $hour <= 18; $hour++)
-                        <div class="grid grid-cols-8 border-b border-gray-100">
-                            <div class="p-4 text-xs text-gray-400 text-right pr-4">
-                                {{ $hour < 12 ? $hour . ' AM' : ($hour == 12 ? '12 PM' : ($hour - 12) . ' PM') }}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            @forelse($todayAppointments as $apt)
+                <div
+                    class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col transition hover:shadow-md">
+                    <div class="p-6 flex-1">
+                        <div class="flex items-start gap-4 mb-4">
+                            <div
+                                class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden">
+                                @if($apt->client && $apt->client->profile_photo_url)
+                                    <img src="{{ $apt->client->profile_photo_url }}" class="w-full h-full object-cover">
+                                @else
+                                    <span
+                                        class="text-slate-500 font-bold text-lg">{{ substr($apt->client->name ?? 'C', 0, 1) }}</span>
+                                @endif
                             </div>
-                            @for($d = 0; $d < 7; $d++)
-                                @php 
-                                    $dayDate = $startOfWeek->copy()->addDays($d);
-                                    $dayAppointments = $appointments->filter(function($apt) use ($hour, $dayDate) {
-                                        return $apt->start_time->format('Y-m-d') == $dayDate->format('Y-m-d') 
-                                               && $apt->start_time->format('G') == $hour;
-                                    });
-                                @endphp
-                                <div class="border-l border-gray-100 min-h-[60px] p-1 {{ $dayDate->isToday() ? 'bg-teal-50/30' : '' }}">
-                                    @foreach($dayAppointments as $apt)
-                                        @php
-                                            $colors = [
-                                                'Confirmed' => 'bg-teal-100 border-teal-400 text-teal-800',
-                                                'Pending' => 'bg-amber-100 border-amber-400 text-amber-800',
-                                                'Completed' => 'bg-green-100 border-green-400 text-green-800',
-                                            ];
-                                            $color = $colors[$apt->status] ?? 'bg-gray-100 border-gray-400 text-gray-800';
-                                        @endphp
-                                        <div class="appointment-block rounded-lg border-l-4 {{ $color }} p-2 text-xs cursor-pointer hover:shadow-md transition">
-                                            <p class="font-semibold truncate">{{ $apt->client->name ?? 'Cliente' }}</p>
-                                            <p class="text-[10px] opacity-75 truncate">{{ $apt->service->name ?? 'Servicio' }}</p>
-                                            <p class="text-[10px] opacity-60">{{ $apt->start_time->format('H:i') }} - {{ $apt->end_time->format('H:i') }}</p>
-                                        </div>
-                                    @endforeach
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-900">{{ $apt->client->name ?? 'Cliente' }}</h3>
+                                <div class="flex items-center gap-1 text-sm text-gray-500">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    {{ $apt->start_time->format('H:i') }}
                                 </div>
-                            @endfor
+                            </div>
                         </div>
-                    @endfor
-                </div>
-            </div>
-        </main>
 
-        <!-- Right Sidebar: Agenda de Hoy -->
-        <aside class="w-80 bg-white border-l border-gray-200 p-6 hidden lg:block">
-            <div class="mb-6">
-                <h2 class="text-lg font-bold text-gray-900 mb-1">Agenda de Hoy</h2>
-                <p class="text-sm text-gray-500">{{ \Carbon\Carbon::now()->translatedFormat('l, d \d\e F') }}</p>
-            </div>
-
-            <!-- Today's Appointments -->
-            <div class="space-y-4 mb-8">
-                @forelse($todayAppointments as $apt)
-                    <div class="border border-gray-100 rounded-xl p-4 hover:shadow-md transition cursor-pointer">
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="text-sm font-medium text-gray-900">{{ $apt->start_time->format('H:i') }}</span>
-                            @if($apt->status == 'Confirmed' && $apt->start_time->diffInMinutes(now()) <= 60 && $apt->start_time > now())
-                                <span class="text-xs font-medium text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full">En Curso</span>
+                        <div class="bg-slate-50 rounded-lg p-3 mb-4">
+                            <p class="text-sm font-medium text-gray-700">{{ $apt->service->name ?? 'Servicio' }}</p>
+                            @if($apt->notes)
+                                <p class="text-xs text-gray-500 mt-1 italic">"{{ $apt->notes }}"</p>
                             @endif
                         </div>
-                        <h4 class="font-semibold text-gray-900">{{ $apt->client->name ?? 'Cliente' }}</h4>
-                        <p class="text-sm text-gray-500">{{ $apt->service->name ?? 'Servicio' }}</p>
-                        @if($apt->notes)
-                            <p class="text-xs text-gray-400 mt-2 italic">{{ $apt->notes }}</p>
+                    </div>
+
+                    <div class="p-4 bg-gray-50 border-t border-gray-100">
+                        @if($apt->status === 'Completed')
+                            <button disabled
+                                class="w-full py-2.5 rounded-lg bg-green-100 text-green-700 font-medium text-sm flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                                    </path>
+                                </svg>
+                                Completado
+                            </button>
+                        @elseif($apt->status === 'Cancelled')
+                            <span class="block text-center text-sm text-red-500 py-2">Cancelado</span>
+                        @else
+                            <button @click="selectedAppointment = {{ $apt->id }}; openModal = true"
+                                class="w-full py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm transition flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Finalizar Servicio
+                            </button>
                         @endif
                     </div>
-                @empty
-                    <div class="text-center py-10">
-                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        </div>
-                        <p class="text-gray-500">Sin citas para hoy</p>
-                    </div>
-                @endforelse
-            </div>
+                </div>
+            @empty
+                <div class="col-span-full text-center py-12 bg-white rounded-2xl border border-dashed border-gray-300">
+                    <p class="text-gray-500">No tienes citas programadas para hoy.</p>
+                </div>
+            @endforelse
+        </div>
 
-            <!-- Stats -->
-            <div class="grid grid-cols-2 gap-4 pt-6 border-t border-gray-100">
-                <div class="text-center">
-                    <p class="text-3xl font-bold text-gray-900">{{ $todayAppointments->count() }}</p>
-                    <p class="text-xs text-gray-500 uppercase tracking-wide">Citas Hoy</p>
-                </div>
-                <div class="text-center">
-                    <p class="text-3xl font-bold text-teal-600">{{ $todayAppointments->count() > 0 ? round(($todayAppointments->where('status', 'Confirmed')->count() / max($todayAppointments->count(), 1)) * 100) : 0 }}%</p>
-                    <p class="text-xs text-gray-500 uppercase tracking-wide">Confirmadas</p>
-                </div>
+        <!-- Section 2: Weekly Grid (Collapsed or below) -->
+        <h2 class="text-lg font-semibold text-gray-900 mb-6">Calendario Semanal</h2>
+        <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+            <div class="grid grid-cols-7 border-b border-gray-200 bg-gray-50">
+                @foreach(['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'] as $day)
+                    <div class="p-3 text-center text-xs font-semibold text-gray-500 uppercase">{{ $day }}</div>
+                @endforeach
             </div>
-        </aside>
+            <div class="grid grid-cols-7 divide-x divide-gray-100">
+                @php
+                    $startOfWeek = now()->startOfWeek();
+                @endphp
+                @for($i = 0; $i < 7; $i++)
+                    @php $currentDay = $startOfWeek->copy()->addDays($i); @endphp
+                    <div class="min-h-[150px] p-2 {{ $currentDay->isToday() ? 'bg-teal-50/20' : '' }}">
+                        <p
+                            class="text-center text-sm mb-2 {{ $currentDay->isToday() ? 'font-bold text-teal-600' : 'text-gray-400' }}">
+                            {{ $currentDay->format('d') }}</p>
+                        @foreach($appointments as $wApt)
+                            @if($wApt->start_time->isSameDay($currentDay))
+                                <div
+                                    class="text-[10px] p-1 mb-1 rounded {{ $wApt->status == 'Confirmed' ? 'bg-teal-100 text-teal-800' : ($wApt->status == 'Completed' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600') }}">
+                                    {{ $wApt->start_time->format('H:i') }} - {{ $wApt->client->name }}
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                @endfor
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal Finalizar Cita -->
+    <div x-show="openModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" @click="openModal = false"></div>
+
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="relative bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl transform transition-all">
+
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900">Finalizar Cita</h2>
+                        <p class="text-sm text-gray-500">¿Productos vendidos en salón?</p>
+                    </div>
+                    <button @click="openModal = false" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <form x-bind:action="'/stylist/appointments/' + selectedAppointment + '/complete'" method="POST">
+                    @csrf
+
+                    <p class="text-sm text-gray-600 mb-4">Agrega los productos que el cliente se lleva para ajustar el
+                        stock automáticamente.</p>
+
+                    <!-- Search Product (Fake implementation for UI) -->
+                    <div class="relative mb-6">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <input type="text"
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl text-sm focus:ring-teal-500 focus:border-teal-500"
+                            placeholder="Buscar producto...">
+                    </div>
+
+                    <!-- Product Grid -->
+                    <div
+                        class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-60 overflow-y-auto mb-8 pr-2 custom-scrollbar">
+                        @foreach($products as $product)
+                            <div class="flex items-center p-3 border border-gray-200 rounded-xl hover:border-teal-400 transition cursor-pointer"
+                                x-data="{ count: 0 }">
+                                <img src="{{ $product->image_url ?? '/images/products/default.jpg' }}"
+                                    class="w-12 h-12 rounded-lg object-cover bg-gray-100">
+                                <div class="ml-3 flex-1">
+                                    <h4 class="text-sm font-semibold text-gray-900 truncate">{{ $product->name }}</h4>
+                                    <p class="text-xs text-gray-500">Stock: {{ $product->stock_quantity }}</p>
+                                </div>
+                                <!-- Counter -->
+                                <div class="flex items-center gap-2">
+                                    <button type="button" @click="if(count>0) count--"
+                                        class="w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 text-xs font-bold">-</button>
+                                    <span class="text-sm font-medium w-4 text-center" x-text="count">0</span>
+                                    <button type="button" @click="count++"
+                                        class="w-6 h-6 rounded-full bg-teal-50 hover:bg-teal-100 flex items-center justify-center text-teal-600 text-xs font-bold">+</button>
+                                    <input type="hidden" :name="'products[{{ $product->id }}]'" :value="count">
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div class="flex justify-end gap-3 pt-4 border-t border-gray-100">
+                        <button type="button" @click="openModal = false"
+                            class="px-5 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-lg transition">Cancelar</button>
+                        <button type="submit"
+                            class="px-5 py-2.5 text-sm font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-lg flex items-center gap-2 shadow-lg shadow-slate-900/20 transform transition active:scale-95">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2">
+                                </path>
+                            </svg>
+                            Finalizar y Ajustar Stock
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <script>
-        function toggleDropdown() {
-            const dropdown = document.getElementById('userDropdown');
-            dropdown.classList.toggle('hidden');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            const dropdown = document.getElementById('userDropdown');
-            const button = e.target.closest('button');
-            if (!button && !dropdown.contains(e.target)) {
-                dropdown.classList.add('hidden');
-            }
-        });
-    </script>
 </body>
+
 </html>

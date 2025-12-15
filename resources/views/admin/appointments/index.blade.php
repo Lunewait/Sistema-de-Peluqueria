@@ -6,7 +6,7 @@
     <div class="px-8 py-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-900">Gestión de Citas</h1>
-            <a href="{{ route('appointments.create') }}"
+            <a href="{{ route('admin.appointments.create') }}"
                 class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -62,17 +62,18 @@
                                     <span class="text-xs text-gray-400">{{ $appointment->start_time->format('H:i') }}</span>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                            {{ $appointment->status == 'Confirmed' ? 'bg-green-100 text-green-800' : '' }}
-                                            {{ $appointment->status == 'Pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                            {{ $appointment->status == 'Cancelled' ? 'bg-red-100 text-red-800' : '' }}
-                                            {{ $appointment->status == 'Completed' ? 'bg-blue-100 text-blue-800' : '' }}">
+                                    <span
+                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                                            {{ $appointment->status == 'Confirmed' ? 'bg-green-100 text-green-800' : '' }}
+                                                            {{ $appointment->status == 'Pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                                            {{ $appointment->status == 'Cancelled' ? 'bg-red-100 text-red-800' : '' }}
+                                                            {{ $appointment->status == 'Completed' ? 'bg-blue-100 text-blue-800' : '' }}">
                                         {{ $appointment->status }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-2">
-                                        <a href="{{ route('appointments.edit', $appointment) }}"
+                                        <a href="{{ route('admin.appointments.edit', $appointment) }}"
                                             class="p-1 hover:bg-gray-100 rounded text-blue-600 hover:text-blue-800">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -80,7 +81,7 @@
                                                 </path>
                                             </svg>
                                         </a>
-                                        <form action="{{ route('appointments.destroy', $appointment) }}" method="POST"
+                                        <form action="{{ route('admin.appointments.destroy', $appointment) }}" method="POST"
                                             onsubmit="return confirm('¿Estás seguro?');" class="inline">
                                             @csrf
                                             @method('DELETE')
