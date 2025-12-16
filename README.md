@@ -1,96 +1,88 @@
-# 💇‍♀️ Sistema de Gestión de Peluquería (HairCloud / Lumina)
+# ✨ Lumina - Sistema Integral para Salones de Belleza
 
-Sistema integral de gestión para salones de belleza y estética, diseñado con una experiencia de usuario premium ("Lumina Design"). Incluye un flujo de reservas interactivo para clientes y un panel de control para estilistas.
+Plataforma premium de gestión de peluquería (SaaS) que combina una experiencia de usuario de lujo para los clientes con herramientas potentes de administración para el negocio.
 
-![Lumina UI](public/images/logo.png)
+![Lumina Banner](public/images/logo.png)
 
-## 🚀 Características Principales
+## 🌟 Nuevas Funcionalidades (v2.0)
 
-### Para Clientes (Frontend)
-*   **Diseño Premium (Lumina):** Interfaz moderna y elegante con animaciones suaves y paleta de colores Teal/Dark.
-*   **Selección Visual de Servicios:** Tarjetas interactivas con imágenes de alta calidad.
-*   **Agenda Dinámica:** Selección inteligente de fechas y horarios basada en disponibilidad real.
-*   **Carrito de Productos:** Venta cruzada de productos (Sérums, Mascarillas) durante la reserva.
-*   **Pagos Simulados:** Interfaz de pasarela de pagos con conversión de moneda (USD -> PEN) y cálculo de depósitos.
-*   **Sistema de Notificaciones:** Pantallas de éxito.
+### 🛍️ Experiencia del Cliente (Frontend One-Page)
+*   **Tienda Integrada (Shop Drawer):** Catálogo de productos insertado orgánicamente en la landing page con carrito de compras lateral (sin recargas).
+*   **Reserva de Citas Visual:** Flujo de 3 pasos (Servicio -> Estilista/Horario -> Pago) con validación de disponibilidad en tiempo real.
+*   **Pasarela de Pagos Unificada:** 
+    *   Tanto las **Reservas** como las **Compras** pasan por un checkout seguro centralizado.
+    *   Soporte simulado para **Tarjetas de Crédito** (validación visual) y **Billeteras Digitales** (QR Yape/Plin).
+*   **Imágenes Inteligentes:** Lógica de fallback avanzada que soporta imágenes locales y URLs externas (CDN).
 
-### Para Estilistas (Backend)
-*   **Dashboard Semanal:** Vista general de todas las citas de la semana.
-*   **Agenda Diaria:** Lista detallada de citas del día con estados.
+### 💼 Gestión del Negocio (Admin & Stylist)
+*   **Panel de Administrador:**
+    *   Gestión total de citas (calendario y lista).
+    *   **Punto de Venta (POS):** Cobro final de citas con cálculo automático de pendientes (Precio - Depósito).
+    *   **Venta de Productos en Caja:** Posibilidad de agregar productos al momento de cobrar el servicio.
+*   **Panel de Estilista:**
+    *   Agenda personal diaria y semanal.
+    *   Visualización de detalles de pago y notas del cliente.
+*   **Gestión de Órdenes:** Sistema interno para manejar pedidos de la tienda online (`Pending`, `Paid`, `Shipped`).
 
-## 🛠 Stack Tecnológico
+## 🛠️ Stack Tecnológico
 
 *   **Backend:** Laravel 10 (PHP 8.2)
-*   **Base de Datos:** PostgreSQL
-*   **Frontend:** Blade Templates + JavaScript Vanilla
-*   **Estilos:** Tailwind CSS (vía CDN para máxima compatibilidad)
-*   **Infraestructura:** Listo para desplegar en Render.com
+*   **Base de Datos:** PostgreSQL / MySQL
+*   **Frontend:** Blade Templates + **Alpine.js** (Reactividad ligera)
+*   **Estilos:** Tailwind CSS (Diseño Premium "Lumina")
+*   **Infraestructura:** Docker Ready + Render Deploy
 
-## 💻 Instalación Local
+## 🚀 Instalación y Despliegue
 
-1.  **Clonar el repositorio**
-    ```bash
-    git clone https://github.com/Lunewait/Sistema-de-Peluqueria.git
-    cd Sistema-de-Peluqueria
-    ```
+### Requisitos Previos
+*   PHP 8.2+
+*   Composer
+*   Node.js & NPM (Opcional, los assets usan CDN)
+*   Base de datos (PostgreSQL recomendado)
 
-2.  **Instalar Dependencias PHP**
-    ```bash
-    composer install
-    ```
+### 1. Instalación Local
+```bash
+git clone https://github.com/Lunewait/Sistema-de-Peluqueria.git
+cd Sistema-de-Peluqueria
+composer install
+cp .env.example .env
+php artisan key:generate
+```
 
-3.  **Configurar Entorno**
-    ```bash
-    cp .env.example .env
-    php artisan key:generate
-    ```
-    *Configura tus credenciales de base de datos en el archivo `.env`.*
+### 2. Configuración de Base de Datos
+Configura tu `.env` y luego ejecuta:
+```bash
+# Migraciones + Seeders (Usuarios base y Productos con imágenes)
+php artisan migrate:fresh --seed
+```
 
-4.  **Base de Datos & Semillas**
-    ```bash
-    php artisan migrate --seed
-    ```
-    *Esto creará los usuarios de prueba (estilistas, administrador) y servicios base.*
+### 3. Usuarios de Prueba (Seeders)
+*   **Admin:** `admin@lumina.com` / `password`
+*   **Estilista:** `ana@lumina.com` / `password`
+*   **Cliente:** (Registro automático al reservar)
 
-5.  **Ejecutar Servidor**
-    ```bash
-    php artisan serve
-    ```
+### 4. Ejecución
+```bash
+php artisan serve
+```
 
-## ☁️ Guía de Despliegue en Render.com
+## 💳 Flujo de Pagos (Payment Gateway)
 
-Este proyecto está optimizado para desplegarse como un **Web Service** en Render.
+El sistema cuenta con un controlador unificado `PaymentGatewayController` que maneja transacciones de dos tipos:
+1.  **`booking`**: Cobra el depósito (20%) para confirmar una cita.
+2.  **`order`**: Cobra el total de una compra en la tienda online.
 
-1.  **Crear Base de Datos (PostgreSQL):**
-    *   En Render, crea una nueva "PostgreSQL database".
-    *   Copia la `Internal Database URL`.
+La pasarela incluye simulaciones visuales de:
+*   Procesamiento de Tarjetas (Loader y validación).
+*   Generación de QRs para pago móvil.
+*   Pantallas de éxito y redirección post-pago.
 
-2.  **Crear Web Service:**
-    *   Conecta tu repositorio de GitHub.
-    *   **Runtime:** PHP
-    *   **Build Command:** `composer install --no-dev --optimize-autoloader`
-    *   **Start Command:** `heroku-php-apache2 public/`
-
-3.  **Variables de Entorno (Environment Variables):**
-    Añade las siguientes variables en la configuración de Render:
-    *   `APP_NAME`: HairCloud
-    *   `APP_ENV`: production
-    *   `APP_KEY`: (Copia la clave generada en local)
-    *   `APP_DEBUG`: false
-    *   `APP_URL`: (Tu URL de Render, ej: https://mi-salon.onrender.com)
-    *   `DATABASE_URL`: (Pega la URL interna de la base de datos que creaste en el paso 1)
-    *   *Nota: Laravel detectará automáticamente la configuración desde `DATABASE_URL` si usas una configuración estándar de base de datos.*
-
-4.  **Migración en Producción:**
-    Una vez desplegado, entra a la "Shell" del servicio en Render y ejecuta:
-    ```bash
-    php artisan migrate --seed --force
-    ```
-
-## 📸 Capturas de Pantalla
-
-*   **Paso 1: Selección de Servicios** - Diseño de tarjetas horizontales.
-*   **Paso 3: Pago y Productos** - Resumen oscuro y venta de productos adicionales.
+## 📦 Estructura de Base de Datos Clave
+*   `users`: Roles (1: Admin, 2: Employee, 3: Client).
+*   `appointments`: Citas con estados (`Pending`, `Confirmed`, `Completed`, `Cancelled`).
+*   `products`: Catálogo con control de stock e imágenes (`image_url`).
+*   `orders`: Pedidos de la tienda online con items en formato JSON.
+*   `payments`: Registro histórico de transacciones.
 
 ---
-Desarrollado con ❤️ por **Antigravity** para **HairCloud Systems**.
+© 2025 Lumina Salon Systems.
