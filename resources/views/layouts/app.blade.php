@@ -7,7 +7,9 @@
     <title>Lumina - Reserva tu Momento</title>
 
     <!-- Tailwind via CDN for stability without npm -->
+    <!-- Tailwind via CDN for stability without npm -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
     <script>
         tailwind.config = {
             theme: {
@@ -55,9 +57,12 @@
             <div class="flex items-center gap-3">
                 <img src="/images/logo.png" alt="Lumina Logo" class="h-16 w-auto object-contain">
             </div>
-            <div class="text-xs text-gray-400 font-medium tracking-wide uppercase">
-                Reserva Online
-            </div>
+            <nav class="flex items-center gap-6">
+                <a href="{{ route('booking.step1') }}"
+                    class="text-sm font-medium text-gray-600 hover:text-teal-600 transition">reserva</a>
+                <a href="{{ route('shop.index') }}"
+                    class="text-sm font-medium text-gray-600 hover:text-teal-600 transition">tienda</a>
+            </nav>
         </div>
     </header>
 

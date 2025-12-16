@@ -16,7 +16,9 @@ class AppointmentController extends Controller
         $appointments = Appointment::with(['client', 'employee', 'service'])
             ->orderBy('start_time', 'desc')
             ->paginate(20);
-        return view('admin.appointments.index', compact('appointments'));
+
+        $products = \App\Models\Product::where('is_active', true)->where('stock_quantity', '>', 0)->get();
+        return view('admin.appointments.index', compact('appointments', 'products'));
     }
 
     public function create()
@@ -101,5 +103,52 @@ class AppointmentController extends Controller
         $appointment->delete();
         return redirect()->route('admin.appointments.index')
             ->with('success', 'Cita eliminada exitosamente.');
+    }
+
+    public function complete(Request $request, Appointment $appointment)
+    {
+        // 1. Validar productos y método de pago
+        $request->validate([
+            'products' => 'array',
+            'payment_method' => 'required|string|in:cash,card,yape,plin',
+        ]);
+
+        $totalAmount = $appointment->price; // Precio base del servicio
+
+        // 2. Procesar productos vendidos (OPCIONAL)
+        if ($request->has('products')) {
+            foreach ($request->products as $productId => $quantity) {
+                if ($quantity > 0) {
+                    $product = \App\Models\Product::find($productId);
+                    if ($product && $product->stock_quantity >= $quantity) {
+                        $product->decrement('stock_quantity', $quantity);
+                        $totalAmount += $product->price * $quantity;
+                    }
+                }
+            }
+        }
+
+        // 3. Registrar el Pago Final
+        // Si ya había depósito, el payment amount es el restante o el total nuevo
+        $deposit = $appointment->deposit_amount ?? 0;
+        $finalPaymentAmount = $totalAmount - $deposit;
+
+        if ($finalPaymentAmount > 0) {
+            \App\Models\Payment::create([
+                'appointment_id' => $appointment->id,
+                'amount' => $finalPaymentAmount,
+                'payment_method' => $request->payment_method,
+                'status' => 'completed',
+                'transaction_id' => uniqid('PAY-'),
+            ]);
+        }
+
+        // 4. Actualizar estado de la Cita
+        $appointment->update([
+            'status' => 'Completed',
+            'payment_status' => 'paid',
+        ]);
+
+        return redirect()->back()->with('success', 'Cita finalizada y cobro registrado correctamente.');
     }
 }

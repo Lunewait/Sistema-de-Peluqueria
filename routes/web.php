@@ -17,6 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::get('/shop', [App\Http\Controllers\ShopController::class, 'index'])->name('shop.index');
+
 // =====================
 // AUTENTICACIÓN
 // =====================
@@ -51,6 +53,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('users', UserController::class);
 
     // CRUD Citas
+    Route::post('appointments/{appointment}/complete', [AppointmentController::class, 'complete'])->name('appointments.complete');
     Route::resource('appointments', AppointmentController::class);
 });
 
