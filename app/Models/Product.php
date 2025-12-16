@@ -17,6 +17,7 @@ class Product extends Model
         'category',
         'brand',
         'image',
+        'image_url',
         'gallery',
         'is_active',
         'is_featured',
