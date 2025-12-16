@@ -117,55 +117,85 @@
             <!-- Contenido Principal -->
             <div class="lg:col-span-2 order-1 lg:order-2">
 
-                <!-- Productos Recomendados -->
-                @if($products->count() > 0)
-                    <div class="mb-10">
-                        <div class="flex items-center gap-2 mb-6">
+                <!-- Preview de la Cita -->
+                <div class="bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-200 p-8 mb-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
                             <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
-                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                             </svg>
-                            <h2 class="text-xl font-bold text-gray-900">Recomendados para tu Cuidado</h2>
+                        </div>
+                        <h2 class="text-xl font-bold text-gray-900">Detalle de tu Cita</h2>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Servicio -->
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-teal-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 uppercase tracking-wide font-medium">Servicio</p>
+                                    <p class="font-bold text-gray-900 text-lg">{{ $service->name ?? 'Servicio' }}</p>
+                                    <p class="text-sm text-gray-500">{{ $service->duration_minutes ?? 30 }} minutos</p>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                            @foreach($products as $product)
-                                <div class="product-card border border-gray-100 rounded-2xl overflow-hidden hover:shadow-lg transition-all bg-white"
-                                    data-product-id="{{ $product->id }}" data-name="{{ $product->name }}"
-                                    data-price="{{ $product->price }}">
-                                    <div class="h-40 bg-gray-50 flex items-center justify-center">
-                                        @if($product->image_url)
-                                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
-                                                class="w-full h-full object-contain p-4">
-                                        @else
-                                            <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                                </path>
-                                            </svg>
-                                        @endif
-                                    </div>
-                                    <div class="p-4">
-                                        <h4 class="font-semibold text-gray-900 mb-1 truncate">{{ $product->name }}</h4>
-                                        <div class="flex items-center justify-between">
-                                            <span class="text-teal-600 font-bold">S/{{ number_format($product->price, 2) }}</span>
-                                            <button
-                                                onclick="toggleProduct(this, {{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }})"
-                                                class="add-btn w-8 h-8 rounded-full border-2 border-gray-200 flex items-center justify-center hover:border-teal-600 hover:bg-teal-50 transition-all">
-                                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M12 4v16m8-8H4"></path>
-                                                </svg>
-                                            </button>
-                                        </div>
+                        <!-- Estilista -->
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-slate-700 to-slate-900 rounded-full flex items-center justify-center flex-shrink-0 text-white font-bold text-lg">
+                                    {{ substr($stylist->name ?? 'A', 0, 1) }}
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 uppercase tracking-wide font-medium">Estilista</p>
+                                    <p class="font-bold text-gray-900 text-lg">{{ $stylist->name ?? 'Cualquier disponible' }}</p>
+                                    <div class="flex items-center gap-1 text-sm">
+                                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                        </svg>
+                                        <span class="text-gray-600">4.8</span>
                                     </div>
                                 </div>
-                            @endforeach
+                            </div>
+                        </div>
+
+                        <!-- Fecha y Hora -->
+                        <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 uppercase tracking-wide font-medium">Fecha y Hora</p>
+                                    <p class="font-bold text-gray-900 text-lg">{{ $formattedDate }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Precio Total -->
+                        <div class="bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl p-5 shadow-lg text-white">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-teal-100 uppercase tracking-wide font-medium">Precio Total</p>
+                                    <p class="font-bold text-3xl">S/{{ number_format($service->price ?? 0, 2) }}</p>
+                                    <p class="text-sm text-teal-100 mt-1">Depósito: S/{{ number_format(($service->price ?? 0) * 0.20, 2) }} (20%)</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                @endif
+                </div>
 
                 <!-- Experiencia Premium -->
                 <div class="bg-gradient-to-r from-teal-600 to-teal-700 rounded-2xl p-6 mb-10 text-white">

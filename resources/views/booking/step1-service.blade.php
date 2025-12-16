@@ -94,16 +94,9 @@
                 @foreach($stylists as $stylist)
                     <div onclick="selectStylist(this, {{ $stylist->id }})"
                         class="stylist-card cursor-pointer flex flex-col items-center gap-3 p-4 rounded-2xl border-2 border-transparent hover:border-teal-500 transition-all min-w-[100px]">
-                        <div class="w-16 h-16 rounded-full overflow-hidden bg-gray-200">
-                            @if($stylist->profile_image)
-                                <img src="{{ $stylist->profile_image }}" alt="{{ $stylist->name }}"
-                                    class="w-full h-full object-cover">
-                            @else
-                                <div
-                                    class="w-full h-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white font-bold text-xl">
-                                    {{ substr($stylist->name, 0, 1) }}
-                                </div>
-                            @endif
+                        <div
+                            class="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                            {{ substr($stylist->name, 0, 1) }}
                         </div>
                         <div class="text-center">
                             <p class="font-medium text-gray-900 text-sm">{{ $stylist->name }}</p>

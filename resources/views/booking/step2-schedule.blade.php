@@ -169,21 +169,41 @@
             btn.className = `day-btn flex flex-col items-center justify-center min-w-[85px] h-[100px] rounded-2xl border-2 transition-all duration-300 bg-white border-gray-200 hover:border-teal-400 hover:shadow-lg snap-start relative overflow-hidden group`;
             btn.onclick = () => selectDate(dateStr, btn, dayName, dayNum, monthName);
             btn.innerHTML = `
-                    ${isToday ? '<span class="absolute top-2 right-2 text-[10px] font-bold text-teal-600 bg-teal-100 px-1.5 py-0.5 rounded">HOY</span>' : ''}
-                    <span class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">${dayName}</span>
-                    <span class="text-3xl font-bold text-gray-800 group-hover:text-teal-600 transition-colors">${dayNum}</span>
-                    <span class="text-xs font-medium text-gray-400">${monthName}</span>
-                `;
+                            ${isToday ? '<span class="absolute top-2 right-2 text-[10px] font-bold text-teal-600 bg-teal-100 px-1.5 py-0.5 rounded">HOY</span>' : ''}
+                            <span class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">${dayName}</span>
+                            <span class="text-3xl font-bold text-gray-800 group-hover:text-teal-600 transition-colors">${dayNum}</span>
+                            <span class="text-xs font-medium text-gray-400">${monthName}</span>
+                        `;
             daysContainer.appendChild(btn);
         }
 
-        // Generate Time Slots
-        const generateSlots = () => {
+        // Generate Time Slots - Now checks for past times on today's date
+        const generateSlots = (dateStr) => {
             const slots = [];
             const times = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00'];
+
+            const now = new Date();
+            const isToday = dateStr === now.toISOString().split('T')[0];
+            const currentHour = now.getHours();
+            const currentMinutes = now.getMinutes();
+
             times.forEach(t => {
-                let isAvailable = Math.random() > 0.25;
-                slots.push({ time: t, available: isAvailable });
+                const [slotHour, slotMinutes] = t.split(':').map(Number);
+
+                // Check if this time has already passed (only for today)
+                let isPast = false;
+                if (isToday) {
+                    if (slotHour < currentHour) {
+                        isPast = true;
+                    } else if (slotHour === currentHour && slotMinutes <= currentMinutes) {
+                        isPast = true;
+                    }
+                }
+
+                // Random availability (simulated) but always unavailable if past
+                let isAvailable = isPast ? false : Math.random() > 0.25;
+
+                slots.push({ time: t, available: isAvailable, isPast: isPast });
             });
             return slots;
         };
@@ -200,10 +220,10 @@
 
             btnElement.className = `day-btn flex flex-col items-center justify-center min-w-[85px] h-[100px] rounded-2xl border-2 transition-all duration-300 bg-teal-600 border-teal-600 text-white shadow-xl shadow-teal-600/40 scale-105 snap-start relative overflow-hidden`;
             btnElement.innerHTML = `
-                    <span class="text-xs font-medium text-teal-200 uppercase tracking-wider mb-1">${dayName}</span>
-                    <span class="text-3xl font-bold text-white">${dayNum}</span>
-                    <span class="text-xs font-medium text-teal-200">${monthName}</span>
-                `;
+                            <span class="text-xs font-medium text-teal-200 uppercase tracking-wider mb-1">${dayName}</span>
+                            <span class="text-3xl font-bold text-white">${dayNum}</span>
+                            <span class="text-xs font-medium text-teal-200">${monthName}</span>
+                        `;
 
             // Show Time Section
             const timeSection = document.getElementById('timeSection');
@@ -216,13 +236,16 @@
             const container = document.getElementById('slotsContainer');
             container.innerHTML = '';
 
-            const slots = generateSlots();
+            const slots = generateSlots(selectedDate);
 
             slots.forEach(slot => {
                 const btn = document.createElement('button');
                 btn.disabled = !slot.available;
 
-                if (!slot.available) {
+                if (slot.isPast) {
+                    // Past time - completely disabled with visual indicator
+                    btn.className = "py-3 px-4 rounded-xl text-sm font-semibold bg-gray-50 text-gray-300 cursor-not-allowed line-through transition-all opacity-50";
+                } else if (!slot.available) {
                     btn.className = "py-3 px-4 rounded-xl text-sm font-semibold bg-gray-100 text-gray-400 cursor-not-allowed line-through transition-all";
                 } else {
                     btn.className = "time-btn py-3 px-4 rounded-xl text-sm font-bold border-2 border-gray-200 text-gray-700 hover:border-teal-500 hover:text-teal-600 hover:shadow-md transition-all bg-white";
