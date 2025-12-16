@@ -21,7 +21,7 @@ class ProductSeeder extends Seeder
                 'price' => 34.50,
                 'stock_quantity' => 15,
                 'is_active' => true,
-                'image_url' => 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
+                'image_url' => '/images/serum.png'
             ],
             [
                 'name' => 'Mascarilla Hidratación Profunda',
@@ -29,7 +29,7 @@ class ProductSeeder extends Seeder
                 'price' => 28.00,
                 'stock_quantity' => 24,
                 'is_active' => true,
-                'image_url' => 'https://images.unsplash.com/photo-1556228720-1915d6666e86?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
+                'image_url' => '/images/mascarilla.png'
             ],
             [
                 'name' => 'Shampoo Voluminizador',
@@ -37,7 +37,7 @@ class ProductSeeder extends Seeder
                 'price' => 18.00,
                 'stock_quantity' => 12,
                 'is_active' => true,
-                'image_url' => 'https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
+                'image_url' => '/images/haircut.png' // Usando imagen genérica disponible
             ],
             [
                 'name' => 'Aceite de Argán Puro',
@@ -45,7 +45,7 @@ class ProductSeeder extends Seeder
                 'price' => 22.00,
                 'stock_quantity' => 8,
                 'is_active' => true,
-                'image_url' => 'https://images.unsplash.com/photo-1608248597279-f99d160bfbc8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
+                'image_url' => '/images/aceite.png'
             ],
             [
                 'name' => 'Spray Fijador Flexible',
@@ -53,7 +53,7 @@ class ProductSeeder extends Seeder
                 'price' => 25.00,
                 'stock_quantity' => 30,
                 'is_active' => true,
-                'image_url' => 'https://images.unsplash.com/photo-1595867165039-4d6d37a1c5d0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'
+                'image_url' => '/images/coloring.png' // Usando imagen genérica disponible
             ]
         ];
 
