@@ -64,64 +64,87 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             @forelse($todayAppointments as $apt)
-                <div
-                    class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col transition hover:shadow-md">
-                    <div class="p-6 flex-1">
-                        <div class="flex items-start gap-4 mb-4">
-                            <div
-                                class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden">
-                                @if($apt->client && $apt->client->profile_photo_url)
-                                    <img src="{{ $apt->client->profile_photo_url }}" class="w-full h-full object-cover">
-                                @else
-                                    <span
-                                        class="text-slate-500 font-bold text-lg">{{ substr($apt->client->name ?? 'C', 0, 1) }}</span>
+                    <div
+                        class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col transition hover:shadow-md">
+                        <div class="p-6 flex-1">
+                            <div class="flex items-start gap-4 mb-4">
+                                <div
+                                    class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden">
+                                    @if($apt->client && $apt->client->profile_photo_url)
+                                        <img src="{{ $apt->client->profile_photo_url }}" class="w-full h-full object-cover">
+                                    @else
+                                        <span
+                                            class="text-slate-500 font-bold text-lg">{{ substr($apt->client->name ?? 'C', 0, 1) }}</span>
+                                    @endif
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-900">{{ $apt->client->name ?? 'Cliente' }}</h3>
+                                    <div class="flex items-center gap-1 text-sm text-gray-500">
+                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        {{ $apt->start_time->format('H:i') }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-50 rounded-lg p-3 mb-4">
+                                <div class="flex justify-between items-start">
+                                    <p class="text-sm font-medium text-gray-700">{{ $apt->service->name ?? 'Servicio' }}</p>
+                                    <span class="text-teal-600 font-bold text-sm">S/{{ number_format($apt->price, 2) }}</span>
+                                </div>
+                                @if($apt->notes)
+                                    <p class="text-xs text-gray-500 mt-1 italic">"{{ Str::limit($apt->notes, 50) }}"</p>
                                 @endif
                             </div>
-                            <div>
-                                <h3 class="font-bold text-lg text-gray-900">{{ $apt->client->name ?? 'Cliente' }}</h3>
-                                <div class="flex items-center gap-1 text-sm text-gray-500">
-                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    {{ $apt->start_time->format('H:i') }}
-                                </div>
+
+                            <!-- Payment Status Badge -->
+                            <div class="flex items-center justify-between">
+                                <span
+                                    class="text-xs px-2 py-1 rounded-full font-medium
+                                        {{ $apt->payment_status === 'paid' ? 'bg-green-100 text-green-700' :
+                ($apt->payment_status === 'deposit' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700') }}">
+                                    @if($apt->payment_status === 'paid')
+                                        ✓ Pagado
+                                    @elseif($apt->payment_status === 'deposit')
+                                        ⏳ Depósito: S/{{ number_format($apt->deposit_amount, 2) }}
+                                    @else
+                                        ⚠️ Sin depósito
+                                    @endif
+                                </span>
+                                @if($apt->payment_status !== 'paid' && $apt->deposit_amount)
+                                    <span class="text-xs text-gray-500">Pendiente:
+                                        S/{{ number_format($apt->price - ($apt->payment_status === 'deposit' ? $apt->deposit_amount : 0), 2) }}</span>
+                                @endif
                             </div>
                         </div>
 
-                        <div class="bg-slate-50 rounded-lg p-3 mb-4">
-                            <p class="text-sm font-medium text-gray-700">{{ $apt->service->name ?? 'Servicio' }}</p>
-                            @if($apt->notes)
-                                <p class="text-xs text-gray-500 mt-1 italic">"{{ $apt->notes }}"</p>
+                        <div class="p-4 bg-gray-50 border-t border-gray-100">
+                            @if($apt->status === 'Completed')
+                                <button disabled
+                                    class="w-full py-2.5 rounded-lg bg-green-100 text-green-700 font-medium text-sm flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                                        </path>
+                                    </svg>
+                                    Completado
+                                </button>
+                            @elseif($apt->status === 'Cancelled')
+                                <span class="block text-center text-sm text-red-500 py-2">Cancelado</span>
+                            @else
+                                <button @click="selectedAppointment = {{ $apt->id }}; openModal = true"
+                                    class="w-full py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm transition flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Finalizar Servicio
+                                </button>
                             @endif
                         </div>
                     </div>
-
-                    <div class="p-4 bg-gray-50 border-t border-gray-100">
-                        @if($apt->status === 'Completed')
-                            <button disabled
-                                class="w-full py-2.5 rounded-lg bg-green-100 text-green-700 font-medium text-sm flex items-center justify-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                                    </path>
-                                </svg>
-                                Completado
-                            </button>
-                        @elseif($apt->status === 'Cancelled')
-                            <span class="block text-center text-sm text-red-500 py-2">Cancelado</span>
-                        @else
-                            <button @click="selectedAppointment = {{ $apt->id }}; openModal = true"
-                                class="w-full py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm transition flex items-center justify-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                Finalizar Servicio
-                            </button>
-                        @endif
-                    </div>
-                </div>
             @empty
                 <div class="col-span-full text-center py-12 bg-white rounded-2xl border border-dashed border-gray-300">
                     <p class="text-gray-500">No tienes citas programadas para hoy.</p>

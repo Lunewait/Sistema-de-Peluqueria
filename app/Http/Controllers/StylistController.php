@@ -36,25 +36,42 @@ class StylistController extends Controller
     public function complete(Request $request, $id)
     {
         $appointment = \App\Models\Appointment::findOrFail($id);
+        $stylist = auth()->user();
 
-        // Update Status
-        $appointment->status = 'Completed';
-
-        // Add Sold Products Logic (Example)
+        // Calculate total for products sold
+        $productsSoldTotal = 0;
         if ($request->has('products')) {
             foreach ($request->products as $productId => $qty) {
                 if ($qty > 0) {
                     $product = \App\Models\Product::find($productId);
                     if ($product && $product->stock_quantity >= $qty) {
                         $product->decrement('stock_quantity', $qty);
-                        // In a real app, save to an appointment_products pivot table or sales table
+                        $productsSoldTotal += $product->price * $qty;
                     }
                 }
             }
         }
 
+        // Calculate remaining amount (total - deposit if any paid)
+        $depositPaid = $appointment->payment_status === 'deposit' ? $appointment->deposit_amount : 0;
+        $remainingAmount = $appointment->price - $depositPaid + $productsSoldTotal;
+
+        // Create payment record for the remaining amount
+        \App\Models\Payment::create([
+            'appointment_id' => $appointment->id,
+            'user_id' => $stylist->id,
+            'amount' => $remainingAmount,
+            'type' => $depositPaid > 0 ? 'remaining' : 'full',
+            'method' => $request->input('payment_method', 'cash'),
+            'status' => 'completed',
+            'notes' => $productsSoldTotal > 0 ? 'Incluye productos por S/' . number_format($productsSoldTotal, 2) : null,
+        ]);
+
+        // Update appointment status
+        $appointment->status = 'Completed';
+        $appointment->payment_status = 'paid';
         $appointment->save();
 
-        return redirect()->back()->with('success', 'Cita finalizada y stock actualizado.');
+        return redirect()->back()->with('success', 'Cita finalizada. Cobro total: S/' . number_format($remainingAmount, 2));
     }
 }

@@ -61,6 +61,7 @@ class BookingController extends Controller
         ]);
 
         $service = Service::find($request->service_id);
+        $depositAmount = $service->price * 0.20; // 20% deposit
 
         // 1. Find or Create User
         $user = User::firstOrCreate(
@@ -84,9 +85,11 @@ class BookingController extends Controller
             'service_id' => $request->service_id,
             'start_time' => $startTime,
             'end_time' => $endTime,
-            'status' => 'Confirmed', // Case sensitive enum for Postgres
+            'status' => 'Confirmed',
+            'payment_status' => 'unpaid', // Will be updated when they pay deposit
             'price' => $service->price,
-            'notes' => 'Reserva creada online. Depósito pagado (Simulado).',
+            'deposit_amount' => $depositAmount,
+            'notes' => 'Reserva creada online. Depósito pendiente: S/' . number_format($depositAmount, 2),
         ]);
 
         // Redirect to Success

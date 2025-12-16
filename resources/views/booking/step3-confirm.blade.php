@@ -50,9 +50,11 @@
                         </div>
                         <div>
                             <p class="text-slate-400 text-xs uppercase tracking-wide">Servicio Principal</p>
-                            <p class="font-semibold" id="summary-service">Corte de Cabello</p>
-                            <p class="text-slate-400 text-sm" id="summary-duration">45 minutos</p>
-                            <p class="text-teal-400 font-semibold" id="summary-price">S/25.00</p>
+                            <p class="font-semibold" id="summary-service">{{ $service->name ?? 'Servicio' }}</p>
+                            <p class="text-slate-400 text-sm" id="summary-duration">{{ $service->duration_minutes ?? 30 }}
+                                minutos</p>
+                            <p class="text-teal-400 font-semibold" id="summary-price">
+                                S/{{ number_format($service->price ?? 0, 2) }}</p>
                         </div>
                     </div>
 
@@ -66,7 +68,7 @@
                         </div>
                         <div>
                             <p class="text-slate-400 text-xs uppercase tracking-wide">Estilista</p>
-                            <p class="font-semibold" id="summary-stylist">Ana Martínez</p>
+                            <p class="font-semibold" id="summary-stylist">{{ $stylist->name ?? 'Cualquier disponible' }}</p>
                             <div class="flex items-center gap-1 text-yellow-400 text-sm">
                                 <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                                     <path
@@ -88,7 +90,7 @@
                         </div>
                         <div>
                             <p class="text-slate-400 text-xs uppercase tracking-wide">Fecha & Hora</p>
-                            <p class="font-semibold" id="summary-datetime">Domingo 21 de diciembre, 12:00</p>
+                            <p class="font-semibold" id="summary-datetime">{{ $formattedDate }}</p>
                         </div>
                     </div>
 
@@ -102,11 +104,11 @@
                     <div class="border-t border-slate-700 pt-4 space-y-2">
                         <div class="flex justify-between text-slate-400 text-sm">
                             <span>Subtotal</span>
-                            <span id="summary-subtotal">S/25.00</span>
+                            <span id="summary-subtotal">S/{{ number_format($service->price ?? 0, 2) }}</span>
                         </div>
                         <div class="flex justify-between text-teal-400 font-medium">
                             <span>Depósito Requerido (20%)</span>
-                            <span id="summary-deposit">S/5.00</span>
+                            <span id="summary-deposit">S/{{ number_format(($service->price ?? 0) * 0.20, 2) }}</span>
                         </div>
                     </div>
                 </div>
@@ -274,7 +276,7 @@
     </div>
 
     <script>
-        let baseServicePrice = 25.00; // Precio del servicio base
+        let baseServicePrice = {{ $service->price ?? 0 }}; // Precio del servicio base
         let addedProducts = {};
 
         function toggleProduct(button, productId, productName, productPrice) {
@@ -308,9 +310,9 @@
             for (let id in addedProducts) {
                 productsTotal += addedProducts[id].price;
                 productsHTML += `<div class="flex justify-between text-sm">
-                    <span class="text-slate-300">${addedProducts[id].name}</span>
-                    <span class="text-white">S/${addedProducts[id].price.toFixed(2)}</span>
-                </div>`;
+                                <span class="text-slate-300">${addedProducts[id].name}</span>
+                                <span class="text-white">S/${addedProducts[id].price.toFixed(2)}</span>
+                            </div>`;
             }
 
             // Show/hide products section

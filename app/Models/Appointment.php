@@ -64,7 +64,9 @@ class Appointment extends Model
         'start_time',
         'end_time',
         'status',
+        'payment_status',
         'price',
+        'deposit_amount',
         'notes',
         'internal_notes',
         'cancelled_at',
@@ -81,6 +83,7 @@ class Appointment extends Model
         'end_time' => 'datetime',
         'cancelled_at' => 'datetime',
         'price' => 'decimal:2',
+        'deposit_amount' => 'decimal:2',
     ];
 
     /* =========================================
@@ -109,6 +112,14 @@ class Appointment extends Model
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
+    }
+
+    /**
+     * Get the payments for this appointment.
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 
     /* =========================================
