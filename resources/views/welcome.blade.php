@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lumina - Salón de Belleza Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <style>
@@ -21,7 +22,7 @@
     </style>
 </head>
 
-<body class="bg-white">
+<body class="bg-white" x-data="shopApp()" x-init="initCart()">
 
     <!-- Navbar -->
     <nav class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100">
@@ -32,6 +33,7 @@
             </div>
             <div class="hidden md:flex items-center gap-8">
                 <a href="#servicios" class="text-gray-600 hover:text-teal-600 transition">Servicios</a>
+                <a href="#tienda" class="text-gray-600 hover:text-teal-600 transition">Tienda</a>
                 <a href="#testimonios" class="text-gray-600 hover:text-teal-600 transition">Testimonios</a>
             </div>
             <div class="flex items-center gap-4">

@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use Illuminate\Http\Request;
 use App\Models\Appointment;
+use App\Models\Order;
 use App\Models\Payment;
 use Carbon\Carbon;
 
@@ -13,7 +12,6 @@ class PaymentGatewayController extends Controller
 {
     public function checkout($type, $id)
     {
-        // Por ahora solo manejo Booking, luego Order
         if ($type === 'booking') {
             $item = Appointment::with(['client', 'service'])->findOrFail($id);
 
@@ -26,6 +24,16 @@ class PaymentGatewayController extends Controller
                 'item' => $item,
                 'amount' => $amountToPay,
                 'concept' => 'Reserva: ' . $item->service->name
+            ]);
+        }
+
+        if ($type === 'order') {
+            $item = Order::findOrFail($id);
+            return view('payment.checkout', [
+                'type' => 'order',
+                'item' => $item,
+                'amount' => $item->total_amount,
+                'concept' => 'Compra Online #' . $item->id
             ]);
         }
 
@@ -62,6 +70,16 @@ class PaymentGatewayController extends Controller
             ]);
 
             return redirect()->route('payment.result.success', ['type' => 'booking', 'id' => $appointment->id]);
+        }
+
+        if ($request->type === 'order') {
+            $order = Order::findOrFail($request->id);
+            $order->update([
+                'status' => 'processing',
+                'payment_status' => 'paid'
+            ]);
+
+            return redirect()->route('payment.result.success', ['type' => 'order', 'id' => $order->id]);
         }
 
         return redirect()->back()->with('error', 'Error procesando el pago');

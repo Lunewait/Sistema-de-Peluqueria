@@ -14,10 +14,14 @@ use App\Http\Controllers\Admin\AppointmentController;
 // PÚBLICO - Landing Page
 // =====================
 Route::get('/', function () {
-    return view('welcome');
+    $products = \App\Models\Product::where('is_active', true)
+        ->where('stock_quantity', '>', 0)
+        ->get();
+    return view('welcome', compact('products'));
 })->name('home');
 
 Route::get('/shop', [App\Http\Controllers\ShopController::class, 'index'])->name('shop.index');
+Route::post('/shop/order', [App\Http\Controllers\ShopController::class, 'store'])->name('shop.store');
 
 // =====================
 // AUTENTICACIÓN

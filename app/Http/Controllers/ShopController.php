@@ -14,4 +14,21 @@ class ShopController extends Controller
 
         return view('shop.index', compact('products'));
     }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'cart' => 'required|array',
+            'total' => 'required|numeric'
+        ]);
+
+        $order = \App\Models\Order::create([
+            'total_amount' => $data['total'],
+            'items' => $data['cart'],
+            'status' => 'pending',
+            'payment_status' => 'unpaid'
+        ]);
+
+        return response()->json(['order_id' => $order->id]);
+    }
 }
