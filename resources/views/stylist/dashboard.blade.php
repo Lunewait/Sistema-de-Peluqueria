@@ -17,17 +17,26 @@
 
 <body class="bg-gray-50 text-gray-800" x-data="{
     openModal: false,
+    openViewModal: false,
     selectedAppointment: null,
+    viewAppointment: null,
     appointments: {
         @foreach($appointments as $apt)
             {{ $apt->id }}: {
                 clientName: '{{ addslashes($apt->client->name ?? 'Cliente') }}',
+                clientPhone: '{{ $apt->client->phone ?? 'N/A' }}',
+                clientEmail: '{{ $apt->client->email ?? 'N/A' }}',
                 serviceName: '{{ addslashes($apt->service->name ?? 'Servicio') }}',
+                date: '{{ $apt->start_time->translatedFormat('l, d M Y') }}',
                 time: '{{ $apt->start_time->format('H:i') }}',
+                endTime: '{{ $apt->end_time->format('H:i') }}',
+                duration: {{ $apt->service->duration_minutes ?? 45 }},
                 price: {{ $apt->price }},
                 depositAmount: {{ $apt->deposit_amount ?? 0 }},
                 paymentStatus: '{{ $apt->payment_status }}',
-                remaining: {{ $apt->price - ($apt->payment_status === 'deposit' ? ($apt->deposit_amount ?? 0) : 0) }}
+                status: '{{ $apt->status }}',
+                remaining: {{ $apt->price - ($apt->payment_status === 'deposit' ? ($apt->deposit_amount ?? 0) : 0) }},
+                notes: '{{ addslashes($apt->notes ?? '') }}'
             },
         @endforeach
     },
@@ -63,6 +72,79 @@
                 <span class='text-teal-700 font-medium'>A Cobrar Ahora</span>
                 <span class='font-bold text-xl text-teal-700'>S/${apt.remaining.toFixed(2)}</span>
             </div>
+        `;
+    },
+    updateViewDetails(id) {
+        const apt = this.appointments[id];
+        if (!apt) return;
+        
+        const detailsEl = document.getElementById('viewAppointmentDetails');
+        
+        // Status badge
+        let statusBadge = '';
+        if (apt.status === 'Confirmed') {
+            statusBadge = `<span class='px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-xs font-bold'>✓ Confirmada</span>`;
+        } else if (apt.status === 'Completed') {
+            statusBadge = `<span class='px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold'>✓ Completada</span>`;
+        } else if (apt.status === 'Cancelled') {
+            statusBadge = `<span class='px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold'>✗ Cancelada</span>`;
+        } else {
+            statusBadge = `<span class='px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-bold'>${apt.status}</span>`;
+        }
+
+        // Payment badge
+        let paymentBadge = '';
+        if (apt.paymentStatus === 'paid') {
+            paymentBadge = `<span class='px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold'>💳 Pagado</span>`;
+        } else if (apt.paymentStatus === 'deposit') {
+            paymentBadge = `<span class='px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-bold'>⏳ Depósito: S/${apt.depositAmount.toFixed(2)}</span>`;
+        } else {
+            paymentBadge = `<span class='px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold'>⚠ Sin pago</span>`;
+        }
+        
+        detailsEl.innerHTML = `
+            <div class='flex justify-center gap-2 mb-6'>
+                ${statusBadge}
+                ${paymentBadge}
+            </div>
+
+            <div class='bg-gray-50 rounded-xl p-4 mb-4'>
+                <h4 class='text-xs font-bold text-gray-400 uppercase tracking-wide mb-3'>👤 Cliente</h4>
+                <p class='font-bold text-gray-900 text-lg'>${apt.clientName}</p>
+                <p class='text-sm text-gray-500'>📞 ${apt.clientPhone}</p>
+                <p class='text-sm text-gray-500'>✉️ ${apt.clientEmail}</p>
+            </div>
+
+            <div class='bg-gray-50 rounded-xl p-4 mb-4'>
+                <h4 class='text-xs font-bold text-gray-400 uppercase tracking-wide mb-3'>💇 Servicio</h4>
+                <p class='font-bold text-gray-900 text-lg'>${apt.serviceName}</p>
+                <p class='text-sm text-gray-500'>⏱️ ${apt.duration} minutos</p>
+            </div>
+
+            <div class='bg-gray-50 rounded-xl p-4 mb-4'>
+                <h4 class='text-xs font-bold text-gray-400 uppercase tracking-wide mb-3'>📅 Fecha y Hora</h4>
+                <p class='font-bold text-gray-900'>${apt.date}</p>
+                <p class='text-teal-600 font-semibold'>${apt.time} - ${apt.endTime}</p>
+            </div>
+
+            <div class='bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl p-4 text-white'>
+                <div class='flex justify-between items-center'>
+                    <span class='font-medium'>Precio Total</span>
+                    <span class='font-bold text-2xl'>S/${apt.price.toFixed(2)}</span>
+                </div>
+                ${apt.paymentStatus !== 'paid' ? `
+                <div class='flex justify-between items-center mt-2 pt-2 border-t border-teal-400'>
+                    <span class='text-teal-100 text-sm'>Pendiente por cobrar</span>
+                    <span class='font-bold'>S/${apt.remaining.toFixed(2)}</span>
+                </div>
+                ` : ''}
+            </div>
+
+            ${apt.notes ? `
+            <div class='mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg'>
+                <p class='text-xs text-yellow-800'><strong>📝 Notas:</strong> ${apt.notes}</p>
+            </div>
+            ` : ''}
         `;
     }
 }">
@@ -222,9 +304,10 @@
                         </p>
                         @foreach($appointments as $wApt)
                             @if($wApt->start_time->isSameDay($currentDay))
-                                <div
-                                    class="text-[10px] p-1 mb-1 rounded {{ $wApt->status == 'Confirmed' ? 'bg-teal-100 text-teal-800' : ($wApt->status == 'Completed' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600') }}">
-                                    {{ $wApt->start_time->format('H:i') }} - {{ $wApt->client->name }}
+                                <div @click="viewAppointment = {{ $wApt->id }}; updateViewDetails({{ $wApt->id }}); openViewModal = true"
+                                    class="text-[10px] p-2 mb-1 rounded cursor-pointer hover:shadow-md hover:scale-105 transition-all {{ $wApt->status == 'Confirmed' ? 'bg-teal-100 text-teal-800 hover:bg-teal-200' : ($wApt->status == 'Completed' ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200') }}">
+                                    <div class="font-bold">{{ $wApt->start_time->format('H:i') }}</div>
+                                    <div class="truncate">{{ $wApt->client->name }}</div>
                                 </div>
                             @endif
                         @endforeach
@@ -234,6 +317,52 @@
         </div>
 
     </main>
+
+    <!-- Modal Ver Detalles de Cita -->
+    <div x-show="openViewModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;"
+        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity" @click="openViewModal = false"></div>
+
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="relative bg-white rounded-2xl max-w-lg w-full shadow-2xl transform transition-all overflow-hidden"
+                @click.stop>
+
+                <!-- Modal Header -->
+                <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-gradient-to-r from-teal-600 to-teal-700">
+                    <div class="text-white">
+                        <h2 class="text-xl font-bold">Detalles de la Cita</h2>
+                        <p class="text-sm text-teal-100">Información completa</p>
+                    </div>
+                    <button @click="openViewModal = false"
+                        class="text-teal-200 hover:text-white transition p-2 hover:bg-teal-500 rounded-full">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="p-6">
+                    <div id="viewAppointmentDetails" class="space-y-4">
+                        <p class="text-gray-500 text-center py-8">Cargando detalles...</p>
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3 border-t border-gray-100">
+                    <button @click="openViewModal = false"
+                        class="px-5 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-xl transition">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal Finalizar Cita -->
     <div x-show="openModal" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;"
