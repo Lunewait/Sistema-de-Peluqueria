@@ -188,10 +188,25 @@
                             class="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full">
                             <!-- Imagen -->
                             <div class="aspect-square bg-gray-50 relative overflow-hidden p-4 flex items-center justify-center">
-                                @if ($product->image_url)
-                                    <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
+                                @php
+                                    $imgSrc = $product->image_url;
+                                    if (!$imgSrc && $product->image) {
+                                        $imgSrc = str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image);
+                                    }
+                                @endphp
+
+                                @if ($imgSrc)
+                                    <img src="{{ $imgSrc }}" alt="{{ $product->name }}"
                                         class="object-contain w-full h-full group-hover:scale-105 transition-transform duration-500"
-                                        onerror="this.src='https://dummyimage.com/400x400/f3f4f6/9ca3af&text=No+Image'">
+                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <!-- Fallback visual si falla la carga de la imagen válida -->
+                                    <div class="hidden absolute inset-0 items-center justify-center bg-gray-50 text-gray-300">
+                                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                            </path>
+                                        </svg>
+                                    </div>
                                 @else
                                     <div class="text-gray-300">
                                         <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -218,7 +233,7 @@
                                     <span
                                         class="text-xl font-bold text-teal-600">S/{{ number_format($product->price, 2) }}</span>
                                     <button
-                                        @click="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }}, '{{ $product->image_url }}', {{ $product->stock_quantity }})"
+                                        @click="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }}, '{{ $imgSrc ?? '' }}', {{ $product->stock_quantity }})"
                                         class="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-teal-600 hover:scale-110 transition-all shadow-lg active:scale-95">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
