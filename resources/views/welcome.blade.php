@@ -32,8 +32,7 @@
             </div>
             <div class="hidden md:flex items-center gap-8">
                 <a href="#servicios" class="text-gray-600 hover:text-teal-600 transition">Servicios</a>
-                <a href="#tienda" class="text-gray-600 hover:text-teal-600 transition">Tienda</a>
-                <a href="#testimonios" class="text-gray-600 hover:text-teal-600 transition">Historias</a>
+                <a href="#testimonios" class="text-gray-600 hover:text-teal-600 transition">Testimonios</a>
             </div>
             <div class="flex items-center gap-4">
                 @auth
@@ -98,9 +97,9 @@
                                 d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                         </svg>
                     </a>
-                    <a href="#tienda"
+                    <a href="#servicios"
                         class="border border-gray-300 hover:border-gray-400 text-gray-700 px-6 py-3 rounded-full font-medium transition-all">
-                        Ver Catálogo
+                        Ver Servicios
                     </a>
                 </div>
                 <div class="flex items-center gap-4">
@@ -170,49 +169,23 @@
         </div>
     </section>
 
-    <!-- Productos Section -->
-    <section id="tienda" class="py-20 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex justify-between items-end mb-12">
-                <div>
-                    <h2 class="text-3xl font-bold text-gray-900">Favoritos de la Temporada</h2>
-                    <p class="text-gray-500 mt-2">Productos profesionales para llevar el salón a casa.</p>
-                </div>
-                <a href="#" class="text-teal-600 hover:text-teal-700 font-medium flex items-center gap-1">
-                    Ver toda la tienda
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </a>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                @php
-                    $productos = [
-                        ['name' => 'Sérum Reparador Nocturno', 'price' => 34.50, 'best' => true, 'img' => '/images/serum.png'],
-                        ['name' => 'Mascarilla Hidratación Profunda', 'price' => 28.00, 'best' => true, 'img' => '/images/mascarilla.png'],
-                        ['name' => 'Aceite de Argán Puro', 'price' => 22.00, 'best' => true, 'img' => '/images/aceite.png'],
-                        ['name' => 'Shampoo Voluminizador', 'price' => 18.00, 'best' => false, 'img' => 'https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=400'],
-                    ];
-                @endphp
-                @foreach($productos as $producto)
-                    <div class="group cursor-pointer">
-                        <div class="relative rounded-2xl overflow-hidden mb-4 bg-gray-100 aspect-square">
-                            @if($producto['best'])
-                                <span
-                                    class="absolute top-3 left-3 bg-teal-600 text-white text-xs font-semibold px-3 py-1 rounded-full z-10">Best
-                                    Seller</span>
-                            @endif
-                            <img src="{{ $producto['img'] }}" alt="{{ $producto['name'] }}"
-                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                        </div>
-                        <h4 class="font-semibold text-gray-900">{{ $producto['name'] }}</h4>
-                        <div class="flex justify-between items-center mt-2">
-                            <span class="text-teal-600 font-bold">S/{{ number_format($producto['price'], 2) }}</span>
-                            <a href="#" class="text-gray-500 hover:text-teal-600 text-sm font-medium">Ver Producto</a>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
+
+    <!-- CTA Section (reemplaza sección de productos) -->
+    <section class="py-20 px-6 bg-gradient-to-br from-teal-600 to-teal-700">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold text-white mb-6">¿Lista para un nuevo look?</h2>
+            <p class="text-teal-100 text-lg mb-8 max-w-2xl mx-auto">
+                Reserva tu cita hoy y déjanos transformar tu imagen. Nuestro equipo de expertos está listo para
+                atenderte.
+            </p>
+            <a href="{{ route('booking.step1') }}"
+                class="inline-flex items-center gap-2 bg-white hover:bg-gray-100 text-teal-700 px-8 py-4 rounded-full font-bold text-lg transition-all shadow-lg hover:shadow-xl">
+                Reservar Cita Ahora
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3">
+                    </path>
+                </svg>
+            </a>
         </div>
     </section>
 

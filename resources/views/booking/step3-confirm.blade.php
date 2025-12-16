@@ -122,7 +122,9 @@
                     <div class="flex items-center gap-3 mb-6">
                         <div class="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
                             <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                                </path>
                             </svg>
                         </div>
                         <h2 class="text-xl font-bold text-gray-900">Detalle de tu Cita</h2>
@@ -132,9 +134,12 @@
                         <!-- Servicio -->
                         <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
                             <div class="flex items-start gap-4">
-                                <div class="w-12 h-12 bg-teal-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <div
+                                    class="w-12 h-12 bg-teal-500 rounded-xl flex items-center justify-center flex-shrink-0">
                                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z">
+                                        </path>
                                     </svg>
                                 </div>
                                 <div>
@@ -148,15 +153,18 @@
                         <!-- Estilista -->
                         <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
                             <div class="flex items-start gap-4">
-                                <div class="w-12 h-12 bg-gradient-to-br from-slate-700 to-slate-900 rounded-full flex items-center justify-center flex-shrink-0 text-white font-bold text-lg">
+                                <div
+                                    class="w-12 h-12 bg-gradient-to-br from-slate-700 to-slate-900 rounded-full flex items-center justify-center flex-shrink-0 text-white font-bold text-lg">
                                     {{ substr($stylist->name ?? 'A', 0, 1) }}
                                 </div>
                                 <div>
                                     <p class="text-xs text-gray-400 uppercase tracking-wide font-medium">Estilista</p>
-                                    <p class="font-bold text-gray-900 text-lg">{{ $stylist->name ?? 'Cualquier disponible' }}</p>
+                                    <p class="font-bold text-gray-900 text-lg">
+                                        {{ $stylist->name ?? 'Cualquier disponible' }}</p>
                                     <div class="flex items-center gap-1 text-sm">
                                         <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                            <path
+                                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                                         </svg>
                                         <span class="text-gray-600">4.8</span>
                                     </div>
@@ -167,9 +175,12 @@
                         <!-- Fecha y Hora -->
                         <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
                             <div class="flex items-start gap-4">
-                                <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <div
+                                    class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center flex-shrink-0">
                                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                        </path>
                                     </svg>
                                 </div>
                                 <div>
@@ -182,15 +193,19 @@
                         <!-- Precio Total -->
                         <div class="bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl p-5 shadow-lg text-white">
                             <div class="flex items-start gap-4">
-                                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <div
+                                    class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
                                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                        </path>
                                     </svg>
                                 </div>
                                 <div>
                                     <p class="text-xs text-teal-100 uppercase tracking-wide font-medium">Precio Total</p>
                                     <p class="font-bold text-3xl">S/{{ number_format($service->price ?? 0, 2) }}</p>
-                                    <p class="text-sm text-teal-100 mt-1">Depósito: S/{{ number_format(($service->price ?? 0) * 0.20, 2) }} (20%)</p>
+                                    <p class="text-sm text-teal-100 mt-1">Depósito:
+                                        S/{{ number_format(($service->price ?? 0) * 0.20, 2) }} (20%)</p>
                                 </div>
                             </div>
                         </div>
@@ -215,7 +230,7 @@
                     </div>
                 </div>
 
-                <!-- Confirmar Reserva (Sin datos de tarjeta) -->
+                <!-- Confirmar Reserva y Pago del Depósito -->
                 <div class="bg-white rounded-2xl border border-gray-100 p-8">
                     <div class="flex items-center gap-3 mb-6">
                         <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -223,13 +238,70 @@
                                 d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
                             </path>
                         </svg>
-                        <h3 class="text-xl font-bold text-gray-900">Confirmar Reserva</h3>
+                        <h3 class="text-xl font-bold text-gray-900">Confirmar y Pagar Depósito</h3>
                     </div>
 
-                    <p class="text-gray-500 mb-6">
-                        Tu reserva será confirmada inmediatamente. El depósito del <strong>20%</strong> se pagará en el
-                        salón al momento de asistir.
-                    </p>
+                    <!-- Deposit Amount Display -->
+                    <div class="bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200 rounded-xl p-5 mb-6">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-sm text-teal-700 font-medium">Depósito Requerido (20%)</p>
+                                <p class="text-xs text-teal-600">Se descuenta del total al finalizar el servicio</p>
+                            </div>
+                            <span
+                                class="text-3xl font-bold text-teal-700">S/{{ number_format(($service->price ?? 0) * 0.20, 2) }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method Selection -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold text-gray-700 mb-4">¿Cómo pagarás el depósito?</label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3" x-data="{ paymentMethod: 'salon' }">
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="deposit_payment_method" value="salon" checked class="sr-only peer"
+                                    @click="paymentMethod = 'salon'">
+                                <div
+                                    class="p-4 border-2 border-gray-200 rounded-xl text-center peer-checked:border-teal-500 peer-checked:bg-teal-50 transition-all hover:border-teal-300">
+                                    <span class="text-2xl block mb-1">🏪</span>
+                                    <span class="text-xs font-medium text-gray-700">En el Salón</span>
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="deposit_payment_method" value="yape" class="sr-only peer"
+                                    @click="paymentMethod = 'yape'">
+                                <div
+                                    class="p-4 border-2 border-gray-200 rounded-xl text-center peer-checked:border-teal-500 peer-checked:bg-teal-50 transition-all hover:border-teal-300">
+                                    <span class="text-2xl block mb-1">📱</span>
+                                    <span class="text-xs font-medium text-gray-700">Yape</span>
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="deposit_payment_method" value="plin" class="sr-only peer"
+                                    @click="paymentMethod = 'plin'">
+                                <div
+                                    class="p-4 border-2 border-gray-200 rounded-xl text-center peer-checked:border-teal-500 peer-checked:bg-teal-50 transition-all hover:border-teal-300">
+                                    <span class="text-2xl block mb-1">💜</span>
+                                    <span class="text-xs font-medium text-gray-700">Plin</span>
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="deposit_payment_method" value="transfer" class="sr-only peer"
+                                    @click="paymentMethod = 'transfer'">
+                                <div
+                                    class="p-4 border-2 border-gray-200 rounded-xl text-center peer-checked:border-teal-500 peer-checked:bg-teal-50 transition-all hover:border-teal-300">
+                                    <span class="text-2xl block mb-1">🏦</span>
+                                    <span class="text-xs font-medium text-gray-700">Transferencia</span>
+                                </div>
+                            </label>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-3">
+                            <svg class="w-4 h-4 inline text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Si eliges Yape/Plin/Transferencia, recibirás los datos para realizar el pago por email.
+                        </p>
+                    </div>
 
                     <!-- Datos del Cliente -->
                     <form action="{{ route('booking.store') }}" method="POST">
@@ -239,19 +311,20 @@
                         <input type="hidden" name="date" value="{{ request('date', now()->format('Y-m-d')) }}">
                         <input type="hidden" name="time" value="{{ request('time', '10:00') }}">
 
+                        <label class="block text-sm font-bold text-gray-700 mb-4">Tus Datos de Contacto</label>
                         <div class="grid md:grid-cols-2 gap-6 mb-8">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Nombre Completo</label>
+                                <label class="block text-sm font-medium text-gray-600 mb-2">Nombre Completo</label>
                                 <input type="text" name="client_name" required placeholder="Tu nombre"
                                     class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Teléfono</label>
+                                <label class="block text-sm font-medium text-gray-600 mb-2">Teléfono</label>
                                 <input type="tel" name="client_phone" required placeholder="987 654 321"
                                     class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition">
                             </div>
                             <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                <label class="block text-sm font-medium text-gray-600 mb-2">Email</label>
                                 <input type="email" name="client_email" required placeholder="tu@email.com"
                                     class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-200 outline-none transition">
                             </div>
@@ -310,9 +383,9 @@
             for (let id in addedProducts) {
                 productsTotal += addedProducts[id].price;
                 productsHTML += `<div class="flex justify-between text-sm">
-                                    <span class="text-slate-300">${addedProducts[id].name}</span>
-                                    <span class="text-white">S/${addedProducts[id].price.toFixed(2)}</span>
-                                </div>`;
+                                        <span class="text-slate-300">${addedProducts[id].name}</span>
+                                        <span class="text-white">S/${addedProducts[id].price.toFixed(2)}</span>
+                                    </div>`;
             }
 
             // Show/hide products section

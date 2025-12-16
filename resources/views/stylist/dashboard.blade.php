@@ -15,7 +15,57 @@
     </style>
 </head>
 
-<body class="bg-gray-50 text-gray-800" x-data="{ openModal: false, selectedAppointment: null }">
+<body class="bg-gray-50 text-gray-800" x-data="{
+    openModal: false,
+    selectedAppointment: null,
+    appointments: {
+        @foreach($appointments as $apt)
+            {{ $apt->id }}: {
+                clientName: '{{ addslashes($apt->client->name ?? 'Cliente') }}',
+                serviceName: '{{ addslashes($apt->service->name ?? 'Servicio') }}',
+                time: '{{ $apt->start_time->format('H:i') }}',
+                price: {{ $apt->price }},
+                depositAmount: {{ $apt->deposit_amount ?? 0 }},
+                paymentStatus: '{{ $apt->payment_status }}',
+                remaining: {{ $apt->price - ($apt->payment_status === 'deposit' ? ($apt->deposit_amount ?? 0) : 0) }}
+            },
+        @endforeach
+    },
+    updateModalDetails(id) {
+        const apt = this.appointments[id];
+        if (!apt) return;
+        
+        const detailsEl = document.getElementById('appointmentDetails');
+        const depositText = apt.paymentStatus === 'deposit' ? `<span class='text-green-600'>✓ Depósito pagado: S/${apt.depositAmount.toFixed(2)}</span>` : `<span class='text-red-500'>⚠ Sin depósito</span>`;
+        
+        detailsEl.innerHTML = `
+            <div class='flex justify-between items-center py-2 border-b border-gray-100'>
+                <span class='text-gray-500'>Cliente</span>
+                <span class='font-bold text-gray-900'>${apt.clientName}</span>
+            </div>
+            <div class='flex justify-between items-center py-2 border-b border-gray-100'>
+                <span class='text-gray-500'>Servicio</span>
+                <span class='font-bold text-gray-900'>${apt.serviceName}</span>
+            </div>
+            <div class='flex justify-between items-center py-2 border-b border-gray-100'>
+                <span class='text-gray-500'>Hora</span>
+                <span class='font-bold text-gray-900'>${apt.time}</span>
+            </div>
+            <div class='flex justify-between items-center py-2 border-b border-gray-100'>
+                <span class='text-gray-500'>Precio del Servicio</span>
+                <span class='font-bold text-gray-900'>S/${apt.price.toFixed(2)}</span>
+            </div>
+            <div class='flex justify-between items-center py-2 border-b border-gray-100'>
+                <span class='text-gray-500'>Estado del Depósito</span>
+                ${depositText}
+            </div>
+            <div class='flex justify-between items-center py-3 bg-teal-50 rounded-lg px-3 mt-2'>
+                <span class='text-teal-700 font-medium'>A Cobrar Ahora</span>
+                <span class='font-bold text-xl text-teal-700'>S/${apt.remaining.toFixed(2)}</span>
+            </div>
+        `;
+    }
+}">
 
     <!-- Header -->
     <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -102,9 +152,8 @@
 
                             <!-- Payment Status Badge -->
                             <div class="flex items-center justify-between">
-                                <span
-                                    class="text-xs px-2 py-1 rounded-full font-medium
-                                        {{ $apt->payment_status === 'paid' ? 'bg-green-100 text-green-700' :
+                                <span class="text-xs px-2 py-1 rounded-full font-medium
+                                                        {{ $apt->payment_status === 'paid' ? 'bg-green-100 text-green-700' :
                 ($apt->payment_status === 'deposit' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700') }}">
                                     @if($apt->payment_status === 'paid')
                                         ✓ Pagado
@@ -134,7 +183,7 @@
                             @elseif($apt->status === 'Cancelled')
                                 <span class="block text-center text-sm text-red-500 py-2">Cancelado</span>
                             @else
-                                <button @click="selectedAppointment = {{ $apt->id }}; openModal = true"
+                                <button @click="selectedAppointment = {{ $apt->id }}; updateModalDetails({{ $apt->id }}); openModal = true"
                                     class="w-full py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm transition flex items-center justify-center gap-2">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -200,13 +249,14 @@
                 @click.stop>
 
                 <!-- Modal Header -->
-                <div class="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                    <div>
-                        <h2 class="text-xl font-bold text-gray-900">Finalizar Cita</h2>
-                        <p class="text-sm text-gray-500">Selecciona los productos vendidos</p>
+                <div
+                    class="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-gradient-to-r from-slate-800 to-slate-900">
+                    <div class="text-white">
+                        <h2 class="text-xl font-bold">Finalizar Servicio</h2>
+                        <p class="text-sm text-slate-300">Procesa el cobro y cierra la cita</p>
                     </div>
                     <button @click="openModal = false"
-                        class="text-gray-400 hover:text-gray-600 transition p-2 hover:bg-gray-100 rounded-full">
+                        class="text-slate-400 hover:text-white transition p-2 hover:bg-slate-700 rounded-full">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M6 18L18 6M6 6l12 12"></path>
@@ -218,8 +268,55 @@
                     class="p-6">
                     @csrf
 
+                    <!-- Appointment Summary (Dynamic via Alpine) -->
+                    <div class="bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-200 p-5 mb-6">
+                        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4">Resumen de la Cita</h3>
+                        <div id="appointmentDetails" class="space-y-3">
+                            <!-- This gets populated when modal opens -->
+                            <p class="text-sm text-gray-500">Selecciona una cita para ver los detalles...</p>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method Selection -->
+                    <div class="mb-6">
+                        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4">Método de Pago</h3>
+                        <div class="grid grid-cols-3 gap-3">
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="payment_method" value="cash" checked class="sr-only peer">
+                                <div
+                                    class="p-4 border-2 border-gray-200 rounded-xl text-center peer-checked:border-teal-500 peer-checked:bg-teal-50 transition-all hover:border-teal-300">
+                                    <span class="text-2xl block mb-1">💵</span>
+                                    <span class="text-sm font-medium text-gray-700">Efectivo</span>
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="payment_method" value="card" class="sr-only peer">
+                                <div
+                                    class="p-4 border-2 border-gray-200 rounded-xl text-center peer-checked:border-teal-500 peer-checked:bg-teal-50 transition-all hover:border-teal-300">
+                                    <span class="text-2xl block mb-1">💳</span>
+                                    <span class="text-sm font-medium text-gray-700">Tarjeta</span>
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="payment_method" value="yape" class="sr-only peer">
+                                <div
+                                    class="p-4 border-2 border-gray-200 rounded-xl text-center peer-checked:border-teal-500 peer-checked:bg-teal-50 transition-all hover:border-teal-300">
+                                    <span class="text-2xl block mb-1">📱</span>
+                                    <span class="text-sm font-medium text-gray-700">Yape/Plin</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Products Section Header -->
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wide">Productos Vendidos
+                            (Opcional)</h3>
+                        <span class="text-xs text-gray-400">Agrega productos si el cliente compró algo</span>
+                    </div>
+
                     <!-- Search Product -->
-                    <div class="relative mb-6">
+                    <div class="relative mb-4">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
