@@ -118,84 +118,54 @@
             <div class="lg:col-span-2 order-1 lg:order-2">
 
                 <!-- Productos Recomendados -->
-                <div class="mb-10">
-                    <div class="flex items-center gap-2 mb-6">
-                        <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
-                            </path>
-                        </svg>
-                        <h2 class="text-xl font-bold text-gray-900">Recomendados para tu Cuidado</h2>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                        <!-- Producto 1: Sérum -->
-                        <div class="product-card border border-gray-100 rounded-2xl overflow-hidden hover:shadow-lg transition-all"
-                            data-product-id="1" data-name="Sérum Reparador Nocturno" data-price="34.50">
-                            <div class="h-40 bg-gray-50">
-                                <img src="/images/serum.png" alt="Sérum" class="w-full h-full object-contain p-4">
-                            </div>
-                            <div class="p-4">
-                                <h4 class="font-semibold text-gray-900 mb-1">Sérum Reparador Nocturno</h4>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-teal-600 font-bold">S/34.50</span>
-                                    <button onclick="toggleProduct(this, 1, 'Sérum Reparador Nocturno', 34.50)"
-                                        class="add-btn w-8 h-8 rounded-full border-2 border-gray-200 flex items-center justify-center hover:border-teal-600 hover:bg-teal-50 transition-all">
-                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 4v16m8-8H4"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
+                @if($products->count() > 0)
+                    <div class="mb-10">
+                        <div class="flex items-center gap-2 mb-6">
+                            <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                                </path>
+                            </svg>
+                            <h2 class="text-xl font-bold text-gray-900">Recomendados para tu Cuidado</h2>
                         </div>
 
-                        <!-- Producto 2: Mascarilla -->
-                        <div class="product-card border border-gray-100 rounded-2xl overflow-hidden hover:shadow-lg transition-all"
-                            data-product-id="2" data-name="Mascarilla Hidratación Profunda" data-price="28.00">
-                            <div class="h-40 bg-gray-50">
-                                <img src="/images/mascarilla.png" alt="Mascarilla" class="w-full h-full object-contain p-4">
-                            </div>
-                            <div class="p-4">
-                                <h4 class="font-semibold text-gray-900 mb-1">Mascarilla Hidratación Profunda</h4>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-teal-600 font-bold">S/28.00</span>
-                                    <button onclick="toggleProduct(this, 2, 'Mascarilla Hidratación Profunda', 28.00)"
-                                        class="add-btn w-8 h-8 rounded-full border-2 border-gray-200 flex items-center justify-center hover:border-teal-600 hover:bg-teal-50 transition-all">
-                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 4v16m8-8H4"></path>
-                                        </svg>
-                                    </button>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                            @foreach($products as $product)
+                                <div class="product-card border border-gray-100 rounded-2xl overflow-hidden hover:shadow-lg transition-all bg-white"
+                                    data-product-id="{{ $product->id }}" data-name="{{ $product->name }}"
+                                    data-price="{{ $product->price }}">
+                                    <div class="h-40 bg-gray-50 flex items-center justify-center">
+                                        @if($product->image_url)
+                                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
+                                                class="w-full h-full object-contain p-4">
+                                        @else
+                                            <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                                </path>
+                                            </svg>
+                                        @endif
+                                    </div>
+                                    <div class="p-4">
+                                        <h4 class="font-semibold text-gray-900 mb-1 truncate">{{ $product->name }}</h4>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-teal-600 font-bold">S/{{ number_format($product->price, 2) }}</span>
+                                            <button
+                                                onclick="toggleProduct(this, {{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }})"
+                                                class="add-btn w-8 h-8 rounded-full border-2 border-gray-200 flex items-center justify-center hover:border-teal-600 hover:bg-teal-50 transition-all">
+                                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M12 4v16m8-8H4"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Producto 3: Aceite -->
-                        <div class="product-card border border-gray-100 rounded-2xl overflow-hidden hover:shadow-lg transition-all"
-                            data-product-id="3" data-name="Aceite de Argán Puro" data-price="22.00">
-                            <div class="h-40 bg-gray-50">
-                                <img src="/images/aceite.png" alt="Aceite" class="w-full h-full object-contain p-4">
-                            </div>
-                            <div class="p-4">
-                                <h4 class="font-semibold text-gray-900 mb-1">Aceite de Argán Puro</h4>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-teal-600 font-bold">S/22.00</span>
-                                    <button onclick="toggleProduct(this, 3, 'Aceite de Argán Puro', 22.00)"
-                                        class="add-btn w-8 h-8 rounded-full border-2 border-gray-200 flex items-center justify-center hover:border-teal-600 hover:bg-teal-50 transition-all">
-                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M12 4v16m8-8H4"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
-                </div>
+                @endif
 
                 <!-- Experiencia Premium -->
                 <div class="bg-gradient-to-r from-teal-600 to-teal-700 rounded-2xl p-6 mb-10 text-white">
@@ -310,9 +280,9 @@
             for (let id in addedProducts) {
                 productsTotal += addedProducts[id].price;
                 productsHTML += `<div class="flex justify-between text-sm">
-                                <span class="text-slate-300">${addedProducts[id].name}</span>
-                                <span class="text-white">S/${addedProducts[id].price.toFixed(2)}</span>
-                            </div>`;
+                                    <span class="text-slate-300">${addedProducts[id].name}</span>
+                                    <span class="text-white">S/${addedProducts[id].price.toFixed(2)}</span>
+                                </div>`;
             }
 
             // Show/hide products section

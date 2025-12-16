@@ -1,159 +1,235 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="max-w-3xl mx-auto px-4 py-8">
-        <!-- Progress Bar -->
-        <div class="mb-8">
-            <div class="flex justify-between text-sm font-medium text-gray-400 mb-2">
-                <span>Servicios</span>
-                <span class="text-teal-600">Horario</span>
-                <span>Confirmar</span>
-            </div>
-            <div class="h-1 bg-gray-100 rounded-full overflow-hidden">
-                <div class="h-full bg-teal-500 w-2/3 transition-all duration-500"></div>
-            </div>
-        </div>
+    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+        <div class="max-w-4xl mx-auto px-6 py-10">
 
-        <!-- Step Heading -->
-        <div class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-800">2. Elige el Momento</h2>
-            <p class="text-gray-500">Selecciona la fecha ideal para tu visita.</p>
-        </div>
-
-        <div class="space-y-8 animate-fade-in">
-            <!-- Date Selection (Dynamic) -->
-            <div>
-                <div id="daysContainer" class="flex gap-4 overflow-x-auto pb-4 custom-scrollbar snap-x">
-                    <!-- Javascript will inject days here -->
+            <!-- Progress Steps - Premium Style -->
+            <div class="flex items-center justify-center mb-12">
+                <div class="flex items-center gap-4">
+                    <div class="flex flex-col items-center">
+                        <div
+                            class="w-12 h-12 rounded-full bg-teal-600 text-white flex items-center justify-center shadow-lg shadow-teal-600/30">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7">
+                                </path>
+                            </svg>
+                        </div>
+                        <span class="text-teal-600 text-xs font-semibold mt-2 uppercase tracking-wider">Servicios</span>
+                    </div>
+                    <div class="w-20 h-1 bg-teal-600 rounded-full"></div>
+                    <div class="flex flex-col items-center">
+                        <div
+                            class="w-12 h-12 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold text-lg shadow-lg shadow-teal-600/30">
+                            2
+                        </div>
+                        <span class="text-teal-600 text-xs font-semibold mt-2 uppercase tracking-wider">Agenda</span>
+                    </div>
+                    <div class="w-20 h-1 bg-gray-200 rounded-full"></div>
+                    <div class="flex flex-col items-center">
+                        <div
+                            class="w-12 h-12 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center font-bold text-lg">
+                            3
+                        </div>
+                        <span class="text-gray-400 text-xs font-semibold mt-2 uppercase tracking-wider">Pago</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Time Slots -->
-            <div id="timeSection" class="transition-all duration-500 opacity-40 pointer-events-none">
-                <div class="flex items-center gap-2 mb-4">
-                    <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <h3 class="text-lg font-medium text-gray-700">Horarios Disponibles</h3>
+            <!-- Main Content Card -->
+            <div class="bg-white rounded-3xl shadow-xl shadow-gray-200/50 overflow-hidden border border-gray-100">
+
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-slate-900 to-slate-800 px-8 py-6">
+                    <h2 class="text-2xl font-bold text-white mb-1">Elige el Momento Perfecto</h2>
+                    <p class="text-slate-400 text-sm">Selecciona la fecha y hora que mejor se ajuste a tu agenda</p>
                 </div>
 
-                <div id="slotsContainer" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                    <!-- Javascript will inject slots here -->
+                <div class="p-8">
+                    <!-- Date Selection -->
+                    <div class="mb-10">
+                        <div class="flex items-center gap-2 mb-6">
+                            <div class="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900">Fecha</h3>
+                        </div>
+
+                        <div id="daysContainer"
+                            class="flex gap-3 overflow-x-auto pb-4 custom-scrollbar snap-x scroll-smooth">
+                            <!-- JavaScript will inject days here -->
+                        </div>
+                    </div>
+
+                    <!-- Time Slots -->
+                    <div id="timeSection" class="transition-all duration-500 opacity-30 pointer-events-none">
+                        <div class="flex items-center gap-2 mb-6">
+                            <div class="w-8 h-8 bg-teal-100 rounded-lg flex items-center justify-center">
+                                <svg class="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900">Hora Disponible</h3>
+                        </div>
+
+                        <div id="slotsContainer" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                            <!-- JavaScript will inject slots here -->
+                        </div>
+
+                        <!-- Legend -->
+                        <div class="flex items-center gap-6 mt-6 pt-6 border-t border-gray-100">
+                            <div class="flex items-center gap-2">
+                                <div class="w-4 h-4 rounded bg-white border-2 border-gray-200"></div>
+                                <span class="text-xs text-gray-500">Disponible</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-4 h-4 rounded bg-teal-500"></div>
+                                <span class="text-xs text-gray-500">Seleccionado</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-4 h-4 rounded bg-gray-100"></div>
+                                <span class="text-xs text-gray-500">No disponible</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer Actions -->
+                <div class="bg-gray-50 px-8 py-6 flex justify-between items-center border-t border-gray-100">
+                    <button onclick="history.back()"
+                        class="flex items-center gap-2 text-gray-500 hover:text-gray-700 font-medium transition-colors group">
+                        <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                        Volver
+                    </button>
+
+                    <button id="continueBtn"
+                        class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-lg shadow-teal-600/30 opacity-50 cursor-not-allowed flex items-center gap-2 group disabled:transform-none hover:scale-[1.02]">
+                        Continuar
+                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
-        </div>
 
-        <!-- Navigation Buttons -->
-        <div class="flex justify-between mt-12 pt-6 border-t border-gray-100">
-            <button onclick="history.back()"
-                class="text-gray-500 hover:text-gray-700 font-medium px-6 py-3 rounded-xl transition-colors">
-                Atrás
-            </button>
-            <button id="continueBtn"
-                class="bg-teal-500 hover:bg-teal-600 text-white font-bold px-8 py-3 rounded-xl transition-all shadow-lg shadow-teal-500/30 opacity-50 cursor-not-allowed transform active:scale-95">
-                Continuar
-            </button>
+            <!-- Selected Summary (appears when both selected) -->
+            <div id="selectionSummary" class="hidden mt-6 bg-teal-50 border border-teal-200 rounded-2xl p-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-teal-600 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                                </path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm text-teal-700 font-medium">Tu cita será:</p>
+                            <p id="summaryText" class="text-lg font-bold text-gray-900"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // --- Logic inspired by Lumina React Prototype ---
-
-        // PHP Params
         const serviceId = "{{ $serviceId }}";
-        const stylistId = "{{ $stylistId }}";
+        const stylistId = "{{ $stylistId ?? '' }}";
 
-        // State
         let selectedDate = null;
         let selectedTime = null;
 
-        // 1. Generate Next 14 Days
+        // Generate Next 14 Days
         const daysContainer = document.getElementById('daysContainer');
         const today = new Date();
-        const days = [];
+        const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+        const dayNames = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
         for (let i = 0; i < 14; i++) {
             const d = new Date(today);
             d.setDate(today.getDate() + i);
-            days.push(d);
-        }
-
-        days.forEach(d => {
             const dateStr = d.toISOString().split('T')[0];
-            const dayName = d.toLocaleDateString('es-ES', { weekday: 'short' });
+            const dayName = dayNames[d.getDay()];
             const dayNum = d.getDate();
+            const monthName = monthNames[d.getMonth()];
+            const isToday = i === 0;
 
             const btn = document.createElement('button');
-            btn.className = `flex flex-col items-center justify-center min-w-[80px] h-24 rounded-2xl border transition-all duration-200 bg-white border-gray-200 text-gray-600 hover:border-teal-300 hover:bg-teal-50 snap-start`;
-            btn.onclick = () => selectDate(dateStr, btn);
+            btn.className = `day-btn flex flex-col items-center justify-center min-w-[85px] h-[100px] rounded-2xl border-2 transition-all duration-300 bg-white border-gray-200 hover:border-teal-400 hover:shadow-lg snap-start relative overflow-hidden group`;
+            btn.onclick = () => selectDate(dateStr, btn, dayName, dayNum, monthName);
             btn.innerHTML = `
-                <span class="text-xs font-medium uppercase tracking-wider opacity-80">${dayName}</span>
-                <span class="text-2xl font-bold">${dayNum}</span>
-            `;
+                    ${isToday ? '<span class="absolute top-2 right-2 text-[10px] font-bold text-teal-600 bg-teal-100 px-1.5 py-0.5 rounded">HOY</span>' : ''}
+                    <span class="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">${dayName}</span>
+                    <span class="text-3xl font-bold text-gray-800 group-hover:text-teal-600 transition-colors">${dayNum}</span>
+                    <span class="text-xs font-medium text-gray-400">${monthName}</span>
+                `;
             daysContainer.appendChild(btn);
-        });
+        }
 
-        // 2. Mock Time Slots Generator
+        // Generate Time Slots
         const generateSlots = () => {
             const slots = [];
-            const times = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
-
+            const times = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00'];
             times.forEach(t => {
-                // Randomly assign availability
-                let isAvailable = Math.random() > 0.3;
-
+                let isAvailable = Math.random() > 0.25;
                 slots.push({ time: t, available: isAvailable });
             });
             return slots;
         };
 
-        // 3. Interactions
-        function selectDate(dateStr, btnElement) {
+        function selectDate(dateStr, btnElement, dayName, dayNum, monthName) {
             selectedDate = dateStr;
-            selectedTime = null; // Reset time
-            updateContinueLink();
+            selectedTime = null;
+            updateUI();
 
             // UI Updates for Date
-            // Reset all
-            Array.from(daysContainer.children).forEach(b => {
-                b.className = `flex flex-col items-center justify-center min-w-[80px] h-24 rounded-2xl border transition-all duration-200 bg-white border-gray-200 text-gray-600 hover:border-teal-300 hover:bg-teal-50 snap-start`;
+            document.querySelectorAll('.day-btn').forEach(b => {
+                b.className = `day-btn flex flex-col items-center justify-center min-w-[85px] h-[100px] rounded-2xl border-2 transition-all duration-300 bg-white border-gray-200 hover:border-teal-400 hover:shadow-lg snap-start relative overflow-hidden group`;
             });
-            // Highlight selected
-            btnElement.className = `flex flex-col items-center justify-center min-w-[80px] h-24 rounded-2xl border transition-all duration-200 bg-teal-500 border-teal-500 text-white shadow-lg shadow-teal-500/30 transform scale-105 snap-start`;
+
+            btnElement.className = `day-btn flex flex-col items-center justify-center min-w-[85px] h-[100px] rounded-2xl border-2 transition-all duration-300 bg-teal-600 border-teal-600 text-white shadow-xl shadow-teal-600/40 scale-105 snap-start relative overflow-hidden`;
+            btnElement.innerHTML = `
+                    <span class="text-xs font-medium text-teal-200 uppercase tracking-wider mb-1">${dayName}</span>
+                    <span class="text-3xl font-bold text-white">${dayNum}</span>
+                    <span class="text-xs font-medium text-teal-200">${monthName}</span>
+                `;
 
             // Show Time Section
             const timeSection = document.getElementById('timeSection');
-            timeSection.classList.remove('opacity-40', 'pointer-events-none');
+            timeSection.classList.remove('opacity-30', 'pointer-events-none');
 
-            // Render Slots
             renderSlots();
         }
 
         function renderSlots() {
             const container = document.getElementById('slotsContainer');
-            container.innerHTML = ''; // Clear
+            container.innerHTML = '';
 
-            // In "Lumina" logic, slots are clean objects
             const slots = generateSlots();
 
             slots.forEach(slot => {
                 const btn = document.createElement('button');
                 btn.disabled = !slot.available;
 
-                let baseClasses = "py-2 px-4 rounded-xl text-sm font-semibold transition-all duration-200";
-                let stateClasses = "";
-
                 if (!slot.available) {
-                    stateClasses = "bg-gray-100 text-gray-400 cursor-not-allowed line-through decoration-gray-300";
+                    btn.className = "py-3 px-4 rounded-xl text-sm font-semibold bg-gray-100 text-gray-400 cursor-not-allowed line-through transition-all";
                 } else {
-                    stateClasses = "bg-white border border-gray-200 text-gray-700 hover:border-teal-400 hover:text-teal-600 slot-btn";
+                    btn.className = "time-btn py-3 px-4 rounded-xl text-sm font-bold border-2 border-gray-200 text-gray-700 hover:border-teal-500 hover:text-teal-600 hover:shadow-md transition-all bg-white";
                     btn.onclick = () => selectTime(slot.time, btn);
                 }
 
-                btn.className = `${baseClasses} ${stateClasses}`;
                 btn.textContent = slot.time;
-
                 container.appendChild(btn);
             });
         }
@@ -161,48 +237,59 @@
         function selectTime(time, btnElement) {
             selectedTime = time;
 
-            // UI Updates for Time
-            document.querySelectorAll('.slot-btn').forEach(b => {
-                b.className = "py-2 px-4 rounded-xl text-sm font-semibold transition-all duration-200 bg-white border border-gray-200 text-gray-700 hover:border-teal-400 hover:text-teal-600 slot-btn";
+            document.querySelectorAll('.time-btn').forEach(b => {
+                b.className = "time-btn py-3 px-4 rounded-xl text-sm font-bold border-2 border-gray-200 text-gray-700 hover:border-teal-500 hover:text-teal-600 hover:shadow-md transition-all bg-white";
             });
 
-            btnElement.className = "py-2 px-4 rounded-xl text-sm font-semibold transition-all duration-200 bg-teal-500 text-white shadow-md transform scale-105 slot-btn";
+            btnElement.className = "time-btn py-3 px-4 rounded-xl text-sm font-bold border-2 bg-teal-600 border-teal-600 text-white shadow-lg shadow-teal-600/30 scale-105 transition-all";
 
-            updateContinueLink();
+            updateUI();
         }
 
-        function updateContinueLink() {
+        function updateUI() {
             const btn = document.getElementById('continueBtn');
+            const summary = document.getElementById('selectionSummary');
+            const summaryText = document.getElementById('summaryText');
+
             if (selectedDate && selectedTime) {
                 btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                // Using query params to pass data
+                btn.disabled = false;
+
+                // Show summary
+                const dateObj = new Date(selectedDate + 'T00:00:00');
+                const options = { weekday: 'long', day: 'numeric', month: 'long' };
+                const formattedDate = dateObj.toLocaleDateString('es-ES', options);
+                summaryText.textContent = `${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}, ${selectedTime}`;
+                summary.classList.remove('hidden');
+
                 const url = `{{ route('booking.step3') }}?service_id=${serviceId}&stylist_id=${stylistId}&date=${selectedDate}&time=${selectedTime}`;
                 btn.onclick = () => window.location.href = url;
             } else {
                 btn.classList.add('opacity-50', 'cursor-not-allowed');
+                btn.disabled = true;
+                summary.classList.add('hidden');
                 btn.onclick = null;
             }
         }
     </script>
 
     <style>
-        /* Custom Scrollbar for horizontal scrolling */
         .custom-scrollbar::-webkit-scrollbar {
-            height: 6px;
+            height: 8px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: #f1f5f9;
             border-radius: 10px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
+            background: linear-gradient(to right, #14b8a6, #0d9488);
             border-radius: 10px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+            background: linear-gradient(to right, #0d9488, #0f766e);
         }
     </style>
 @endsection

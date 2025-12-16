@@ -48,7 +48,14 @@ class BookingController extends Controller
         // Capitalize first letter of day
         $formattedDate = ucfirst($formattedDate);
 
-        return view('booking.step3-confirm', compact('service', 'stylist', 'date', 'time', 'formattedDate'));
+        // Fetch recommended products (featured or random selection)
+        $products = \App\Models\Product::where('is_active', true)
+            ->where('stock_quantity', '>', 0)
+            ->orderByDesc('is_featured')
+            ->take(3)
+            ->get();
+
+        return view('booking.step3-confirm', compact('service', 'stylist', 'date', 'time', 'formattedDate', 'products'));
     }
 
     public function store(Request $request)
