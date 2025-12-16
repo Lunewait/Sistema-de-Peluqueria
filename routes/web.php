@@ -38,6 +38,15 @@ Route::prefix('booking')->name('booking.')->group(function () {
 });
 
 // =====================
+// PASARELA DE PAGOS
+// =====================
+Route::prefix('payment')->name('payment.')->group(function () {
+    Route::get('/checkout/{type}/{id}', [App\Http\Controllers\PaymentGatewayController::class, 'checkout'])->name('checkout');
+    Route::post('/process', [App\Http\Controllers\PaymentGatewayController::class, 'process'])->name('process');
+    Route::get('/result/success', [App\Http\Controllers\PaymentGatewayController::class, 'success'])->name('result.success');
+});
+
+// =====================
 // PANEL ADMIN (Protegido)
 // =====================
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {

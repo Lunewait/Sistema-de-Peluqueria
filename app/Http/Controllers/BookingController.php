@@ -85,15 +85,15 @@ class BookingController extends Controller
             'service_id' => $request->service_id,
             'start_time' => $startTime,
             'end_time' => $endTime,
-            'status' => 'Confirmed',
-            'payment_status' => 'unpaid', // Will be updated when they pay deposit
+            'status' => 'Pending', // Pendiente hasta que pague el depósito
+            'payment_status' => 'unpaid',
             'price' => $service->price,
             'deposit_amount' => $depositAmount,
-            'notes' => 'Reserva creada online. Depósito pendiente: S/' . number_format($depositAmount, 2),
+            'notes' => 'Reserva online iniciada. Redirigiendo a pasarela.',
         ]);
 
-        // Redirect to Success
-        return redirect()->route('booking.success', ['appointment' => $appointment->id]);
+        // Redirect to Payment Gateway
+        return redirect()->route('payment.checkout', ['type' => 'booking', 'id' => $appointment->id]);
     }
 
     public function success(Request $request)
